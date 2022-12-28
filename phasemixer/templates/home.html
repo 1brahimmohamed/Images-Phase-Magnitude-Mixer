@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Phase Mixer</title>
+
+    <!-- font awesome cdn link  -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+
+    <!-- custom css file link  -->
+    <link rel="stylesheet" href="../static/css/style.css">
+    <link href="https://fonts.googleapis.com/css?family=Inter:400,800,900&display=swap" rel="stylesheet">
+
+    <link href="https://unpkg.com/boxicons@2.1.2/css/boxicons.min.css" rel="stylesheet">
+    <script src="https://code.iconify.design/iconify-icon/1.0.2/iconify-icon.min.js"></script>
+
+</head>
+
+<body>
+<!--   Application Name     -->
+<h1 class="heading"> Phase Mixer </h1>
+
+<!--   Application Body     -->
+<div class="container">
+    <div class="sidebar">
+
+        <div class="toggle">
+        </div>
+    <!--   Side Control Menu     -->
+        <nav>
+            <ul>
+                <li class="nav-item">
+                    <i class='bx bx-circle'></i>
+                </li>
+                <li class="nav-item">
+                    <i class='bx bx-rectangle' ></i>
+                </li>
+                 <li class="nav-item">
+                    <i class='bx bx-intersect' ></i>
+                </li>
+                <li class="nav-item">
+                    <i class='bx bx-minus-front' ></i>
+                </li>
+                <li class="nav-item">
+                    <i class='bx bx-merge' ></i>
+                </li>
+                <li class="nav-item">
+                    <i class='bx bx-outline' ></i>
+                </li>
+            </ul>
+           
+        </nav>
+        </div>
+
+    <!--   The First Original Image      -->
+          <div class="content" id="content1">
+              <canvas class="canvas"> </canvas>
+          </div>
+    <!--   Upload/Enable/Disable Menu      -->
+          <div class="controls-bar">
+              <a href="#"><i class='bx bx-upload'></i></a>
+              <a href="#"><i class='bx bxs-check-square'></i></a>
+              <a href="#"><i class='bx bxs-x-square'></i></a>
+          </div>
+    <!--   Phase/Magnitude of the first image      -->
+          <div class="content" id="content2">
+              <canvas class="canvas"> </canvas>
+          </div>
+    <!--   The Second Original Image      -->
+          <div class="content" id="content3">
+              <canvas class="canvas"> </canvas>
+          </div>
+        <!--   Upload/Enable/Disable Menu      -->
+          <div class="controls-bar">
+              <a href="#"><i class='bx bx-upload'></i></a>
+              <a href="#"><i class='bx bxs-check-square'></i></a>
+              <a href="#"><i class='bx bxs-x-square'></i></a>
+          </div>
+        <!--   Phase/Magnitude of the second image      -->
+          <div class="content" id="content4">
+              <canvas class="canvas"> </canvas>
+          </div>
+        <!--   Output Image      -->
+          <div class="content" id="output">
+              <canvas class="canvas"> </canvas>
+          </div>
+
+
+</div>
+
+</body>
+
+<script type="text/javascript" src="../static/js/script.js"></script>
+
+</html>
