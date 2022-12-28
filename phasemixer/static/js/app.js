@@ -38,7 +38,6 @@ imageObj.onload = function () {
 };
 imageObj.src = '../static/images/img.png';
 
-
 let mouseDownHandler = (event) => {
 
     if (!wantToDraw)
@@ -98,12 +97,31 @@ let mouseMoveHandler = (event) => {
 
 let mouseUpHandler = (event) => {
 
-    if(!wantToDraw)
-        return;
+
+    if(!wantToDraw) {
+        console.log(`
+            'x: ' + ${shapes[0].x()},
+            'y: ' + ${shapes[0].y()},
+            'rotation: ' + ${shapes[0].rotation()},
+            'width: ' + ${(shapes[0].width() * shapes[0].scaleX())},
+            'height: ' + ${shapes[0].height() * shapes[0].scaleY()},
+            'scaleX: ' + ${shapes[0].scaleX()},
+            'scaleY: ' + ${shapes[0].scaleY()},
+            `)
+        return
+    }
 
     isDrawing = false;
-    shapes[0] = objDraw;
-
+    shapes.push(objDraw);
+    console.log(`
+            'x: ' + ${shapes[0].x()},
+            'y: ' + ${shapes[0].y()},
+            'rotation: ' + ${shapes[0].rotation()},
+            'width: ' + ${(shapes[0].width() * shapes[0].scaleX())},
+            'height: ' + ${shapes[0].height() * shapes[0].scaleY()},
+            'scaleX: ' + ${shapes[0].scaleX()},
+            'scaleY: ' + ${shapes[0].scaleY()},
+            `)
     const tr = new Konva.Transformer({
         nodes: [objDraw],
         anchorDragBoundFunc: function (oldPos, newPos, event) {
@@ -119,16 +137,16 @@ let mouseUpHandler = (event) => {
             // do not snap rotating point
             if (tr.getActiveAnchor() === 'rotater') {
                 return newPos;
+
             }
 
             const dist = Math.sqrt(
                 Math.pow(newPos.x - oldPos.x, 2) + Math.pow(newPos.y - oldPos.y, 2)
             );
-            console.log('fo2',newPos)
 
             // do not do any snapping with new absolute position (pointer position)
             // is too far away from old position
-            if (dist > 5) {
+            if (dist > 10) {
                 return newPos;
             }
 
@@ -154,6 +172,7 @@ let mouseUpHandler = (event) => {
                     y: closestY,
                 };
             } else if (snappedX && snappedY) {
+
                 return {
                     x: closestX,
                     y: closestY,
@@ -162,7 +181,23 @@ let mouseUpHandler = (event) => {
             return newPos;
         },
     });
+
     layer.add(tr);
+
+
+}
+
+function updateText() {
+    let lines = [
+        'x: ' + objDraw.x(),
+        'y: ' + objDraw.y(),
+        'rotation: ' + objDraw.rotation(),
+        'width: ' + (objDraw.width() * objDraw.scaleX()),
+        'height: ' + objDraw.height() * objDraw.scaleY(),
+        'scaleX: ' + objDraw.scaleX(),
+        'scaleY: ' + objDraw.scaleY(),
+    ];
+    text.text(lines.join('\n'));
 }
 
 stage.on('mousedown', mouseDownHandler)
