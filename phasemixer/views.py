@@ -4,6 +4,15 @@ from django.views.decorators.csrf import csrf_exempt, csrf_protect
 from PIL import Image
 
 
+
+
+@csrf_protect
+@csrf_exempt
+def home(request):
+    return render(request, 'index.html')
+
+
+
 @csrf_protect
 @csrf_exempt
 def test(request):

@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="x-ua-compatible" content="IE-edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Program Index</title>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/konva/8.3.14/konva.min.js"></script>
+</head>
+<body>
+    <button id="btn">
+        Toggle The Object
+    </button>
+    <button id="btn2">
+        Toggle The Drawing
+    </button>
+    <button id="btn3">
+        Toggle The Drawing
+    </button>
+    <div id="konva-holder"></div>
+    <script src="../static/js/app.js"></script>
+    <script>
+        let myBtn = document.getElementById('btn')
+        let myBtn2 = document.getElementById('btn2')
+        let myBtn3 = document.getElementById('btn3')
+
+        myBtn.onclick = function() {
+            wantToDraw = wantToDraw === false;
+        }
+        myBtn2.onclick = function() {
+            drawCic = drawCic === false;
+        }
+        myBtn3.onclick = function() {
+            log(shapes[0])
+        }
+
+    </script>
+</body>
+</html>
