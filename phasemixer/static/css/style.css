@@ -1,6 +1,10 @@
 :root {
   --main-radius: 30px;
   --main-padding: 5px;
+  --clr-graylight: #cfd8dc;
+  --clr-graymed: #90a4ae;
+  --radius: 20px;
+  --animation-curve: cubic-bezier(0.34, 1.36, 0.2, 1);
 }
 
 body {
@@ -159,6 +163,183 @@ p{
 .active {
   background-color: white;
 }
+
+
+/* switch */
+
+/* .switch-color {
+  width: 25px;
+  height:15px;
+  background: var(--clr-graylight);
+  border-radius: var(--radius);
+  transition: all 500ms var(--animation-curve);
+}
+
+label {
+  width: 20px;
+  height: 20px;
+  border-radius: var(--radius);
+  background: white;
+  position: absolute;
+  top: 43.5%;
+  left: 40%;
+  box-shadow: 2px 2px 10px 2px var(--clr-graylight);
+  z-index: 99;
+  cursor: pointer;
+}
+
+label::before {
+  font-family: "Font Awesome 5 Free";
+  font-weight: 900;
+  font-size: 10px;
+  content: "\f00d";
+  position: absolute;
+  left: 6px;
+  top: 5px;
+  color: var(--clr-graymed);
+}
+
+label::after {
+  font-family: "Font Awesome 5 Free";
+  font-weight: 900;
+  font-size: 10px;
+  content: "\f00c";
+  position: absolute;
+  left: 5px;
+  top: 5px;
+  opacity: 0;
+  color: var(--clr-graymed);
+}
+
+#switch:checked ~ label::before {
+  opacity: 0;
+}
+
+#switch:checked ~ label::after {
+  opacity: 1;
+}
+
+#switch:checked ~ label {
+  transform: translatex(13px) rotatez(360deg);
+}
+
+#switch:checked ~ .switch-color {
+  background: #00e676;
+}
+
+#switch ~ label {
+  transition: all 1s var(--animation-curve);
+}
+
+input {
+  display: none;
+} */
+  
+  .button-cover:before {
+    counter-increment: button-counter;
+    content: counter(button-counter);
+    position: absolute;
+    right: 0;
+    bottom: 0;
+    color: #d7e3e3;
+    font-size: 12px;
+    line-height: 1;
+    padding: 5px;
+  }
+  
+  .button-cover,
+  .knobs,
+  .layer {
+    position: absolute;
+    /* top: 0;
+    right: 0; */
+    bottom: 0;
+    /* left: 0; */
+  }
+  
+  .button {
+    position: relative;
+    top: 50%;
+    width: 74px;
+    height: 36px;
+    margin: -20px auto 5 auto;
+    /* overflow: hidden; */
+  }
+  
+  .button.r,
+  .button.r .layer {
+    width: 40px;
+    height: 30px;
+    /* margin-left: -50px; */
+    padding: 1px;
+    border-radius: 100px;
+  }
+  
+  .checkbox {
+    position: relative;
+    width: 60px;
+    height: 30px;
+    margin-left: -40px;
+    opacity: 0;
+    cursor: pointer;
+    z-index: 3;
+  }
+  
+  .knobs {
+    width: 60px;
+    height: 30px;
+    margin-left: -35px;
+    z-index: 2;
+  }
+  
+  .layer {
+    position: absolute;
+    /* width: fit-content;
+    height: fit-content; */
+    /* margin-top: 10px; */
+    margin-left: -10px;
+    background-color: #8dabb8;
+    transition: 0.3s ease all;
+    z-index: 1;
+  }
+  
+  /* Button 1 */
+  #button-1 .knobs:before {
+    content: "Phase";
+    position: absolute;
+    top: 1px;
+    width: 15px;
+    height: 7px;
+    color: #fff;
+    font-size: 6px;
+    font-weight: bold;
+    text-align: center;
+    line-height: 1;
+    padding: 9px 4px;
+    left: 26px;
+    background-color: #2b2f31;
+    border-radius: 50%;
+    transition: 0.3s cubic-bezier(0.18, 0.89, 0.35, 1.15) all;
+  }
+  
+  #button-1 .checkbox:checked + .knobs:before {
+    content: "Magn";
+    left: 43px;
+    background-color: #f44336;
+  }
+  
+  #button-1 .checkbox:checked ~ .layer {
+    background-color: #fcebeb;
+  }
+  
+  #button-1 .knobs,
+  #button-1 .knobs:before,
+  #button-1 .layer {
+    transition: 0.3s ease all;
+  }
+  
+
+
 
 
 @media only screen and (max-width: 550px) {
