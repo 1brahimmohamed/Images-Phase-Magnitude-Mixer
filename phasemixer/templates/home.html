@@ -12,10 +12,12 @@
     <!-- custom css file link  -->
     <link rel="stylesheet" href="../static/css/style.css">
     <link href="https://fonts.googleapis.com/css?family=Inter:400,800,900&display=swap" rel="stylesheet">
-
     <link href="https://unpkg.com/boxicons@2.1.2/css/boxicons.min.css" rel="stylesheet">
-    <script src="https://code.iconify.design/iconify-icon/1.0.2/iconify-icon.min.js"></script>
 
+    <!-- JavaScript files  -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/konva/8.3.14/konva.min.js"></script>
+    <script src="https://code.iconify.design/iconify-icon/1.0.2/iconify-icon.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/1.2.2/axios.min.js"></script>
 </head>
 
 <body>
@@ -25,18 +27,19 @@
 <!--   Application Body     -->
 <div class="container">
     <div class="sidebar">
+
         <div class="toggle">
         </div>
-    <!--   Side Control Menu     -->
+        <!--   Side Control Menu     -->
         <nav>
-            <ul class="nav-cont">
-                <li class="nav-item">
+            <ul class="navi">
+                <li class="nav-item" >
                     <i class='bx bx-circle'></i>
                 </li>
-                <li class="nav-item">
+                <li class="nav-item active">
                     <i class='bx bx-rectangle' ></i>
                 </li>
-                 <li class="nav-item">
+                <li class="nav-item">
                     <i class='bx bx-intersect' ></i>
                 </li>
                 <li class="nav-item">
@@ -49,76 +52,89 @@
                     <i class='bx bx-outline' ></i>
                 </li>
             </ul>
-           
+
         </nav>
-        </div>
+    </div>
 
     <!--   The First Original Image      -->
-          <div class="content" id="content1">
-              <canvas class="canvas"> </canvas>
-          </div>
+    <div class="content" id="content1">
+        <div class="canvas" id="konva-container-1"> </div>
+    </div>
     <!--   Upload/Enable/Disable Menu      -->
-          <div class="controls-bar">
-              <a href="#"><i class='bx bx-upload'></i></a>
-              <a href="#"><i class='bx bxs-check-square'></i></a>
-              <a href="#"><i class='bx bxs-x-square'></i></a>
-              <!-- <a>
-                <input type="checkbox" id='switch'>
-                <div class="switch-color"></div>
-                <label for="switch"></label>
-              </a> -->
-              <a>
-               
-                <div class="button r" id="button-1">
-                <input type="checkbox" class="checkbox" />
+    <div class="controls-bar">
+        <input class="upload-class" type="file" id="selectedFile" style="display: none;"/>
+
+        <a id="upload" onclick="document.getElementById('selectedFile').click()" href="#" class="input"><i class='bx bx-upload'></i></a>
+        <a href="#"><i class='bx bxs-check-square'></i></a>
+        <a href="#"><i class='bx bxs-x-square'></i></a>
+        <a>
+
+            <div class="button r" id="button-1">
+                <input id="check1" type="checkbox" class="checkbox" />
                 <div class="knobs"></div>
                 <div class="layer"></div>
-                </div>
+            </div>
 
 
-         
-          </a>
-          </div>
+
+        </a>
+    </div>
 
     <!--   Phase/Magnitude of the first image      -->
-          <div class="content" id="content2">
-              <canvas class="canvas"> </canvas>
-          </div>
+    <div class="content" id="content2">
+        <div class="canvas" id="konva-container-2"> </div>
+    </div>
     <!--   The Second Original Image      -->
-          <div class="content" id="content3">
-              <canvas class="canvas"> </canvas>
-          </div>
-        <!--   Upload/Enable/Disable Menu      -->
-          <div class="controls-bar">
-              <a href="#"><i class='bx bx-upload'></i></a>
-              <a href="#"><i class='bx bxs-check-square'></i></a>
-              <a href="#"><i class='bx bxs-x-square'></i></a>
-              <a>
-               
-                    <div class="button r" id="button-1">
-                    <input type="checkbox" class="checkbox" />
-                    <div class="knobs"></div>
-                    <div class="layer"></div>
-                    </div>
+    <div class="content" id="content3">
+        <div class="canvas" id="konva-container-3"> </div>
+    </div>
+    <!--   Upload/Enable/Disable Menu      -->
+    <div class="controls-bar">
+        <input class="upload-class" type="file" id="selectedFile2" style="display: none;"/>
 
+        <a id="upload2" onclick="document.getElementById('selectedFile2').click()" href="#" class="input"><i class='bx bx-upload'></i></a>
+        <a href="#"><i class='bx bxs-check-square'></i></a>
+        <a href="#"><i class='bx bxs-x-square'></i></a>
+        <a>
 
-             
-              </a>
-          </div>
-        <!--   Phase/Magnitude of the second image      -->
-          <div class="content" id="content4">
-              <canvas class="canvas"> </canvas>
-          </div>
-        <!--   Output Image      -->
-          <div class="content" id="output">
-              <canvas class="canvas"> </canvas>
-          </div>
+            <div class="button r" id="button-1">
+                <input id="check2" type="checkbox" class="checkbox"/>
+                <div class="knobs"></div>
+                <div class="layer"></div>
+            </div>
+        </a>
+    </div>
+    <!--   Phase/Magnitude of the second image      -->
+    <div class="content" id="content4">
+        <div class="canvas" id="konva-container-4"> </div>
+    </div>
+    <!--   Output Image      -->
+    <div class="content" id="output">
+        <div class="canvas" id="konva-container-5"> </div>
+    </div>
 
 
 </div>
 
 </body>
 
-<script type="text/javascript" src="../static/js/script.js"></script>
+<script type="text/javascript" src="../static/js/layout.js"></script>
+<script type="text/javascript" src="../static/js/app.js"></script>
+<script src="../static/js/uploadCanvas1.js"></script>
+<script>
+    // let myBtn = document.getElementById('btn')
+    // let myBtn2 = document.getElementById('btn2')
+    // let myBtn3 = document.getElementById('btn3')
+    //
+    // myBtn.onclick = function() {
+    //     wantToDraw = wantToDraw === false;
+    // }
+    // myBtn2.onclick = function() {
+    //     drawCircle = drawCircle === false;
+    // }
+    // myBtn3.onclick = function() {
+    //     log(shapes)
+    // }
 
+</script>
 </html>

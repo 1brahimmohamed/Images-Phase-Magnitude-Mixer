@@ -234,7 +234,7 @@ label::after {
 input {
   display: none;
 } */
-  
+
   .button-cover:before {
     counter-increment: button-counter;
     content: counter(button-counter);
@@ -246,7 +246,7 @@ input {
     line-height: 1;
     padding: 5px;
   }
-  
+
   .button-cover,
   .knobs,
   .layer {
@@ -256,7 +256,7 @@ input {
     bottom: 0;
     /* left: 0; */
   }
-  
+
   .button {
     position: relative;
     top: 50%;
@@ -265,7 +265,7 @@ input {
     margin: -20px auto 5 auto;
     /* overflow: hidden; */
   }
-  
+
   .button.r,
   .button.r .layer {
     width: 40px;
@@ -274,7 +274,7 @@ input {
     padding: 1px;
     border-radius: 100px;
   }
-  
+
   .checkbox {
     position: relative;
     width: 60px;
@@ -284,14 +284,14 @@ input {
     cursor: pointer;
     z-index: 3;
   }
-  
+
   .knobs {
     width: 60px;
     height: 30px;
     margin-left: -35px;
     z-index: 2;
   }
-  
+
   .layer {
     position: absolute;
     /* width: fit-content;
@@ -302,7 +302,7 @@ input {
     transition: 0.3s ease all;
     z-index: 1;
   }
-  
+
   /* Button 1 */
   #button-1 .knobs:before {
     content: "Phase";
@@ -321,23 +321,23 @@ input {
     border-radius: 50%;
     transition: 0.3s cubic-bezier(0.18, 0.89, 0.35, 1.15) all;
   }
-  
+
   #button-1 .checkbox:checked + .knobs:before {
     content: "Magn";
     left: 43px;
     background-color: #f44336;
   }
-  
+
   #button-1 .checkbox:checked ~ .layer {
     background-color: #fcebeb;
   }
-  
+
   #button-1 .knobs,
   #button-1 .knobs:before,
   #button-1 .layer {
     transition: 0.3s ease all;
   }
-  
+
 
 
 
