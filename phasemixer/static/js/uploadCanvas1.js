@@ -102,3 +102,17 @@ document.addEventListener('click', (evt) => {
     }
 })
 
+document.addEventListener("change", (evt)=>{
+    if (evt.target.matches('.checkbox')){
+        if (evt.target.checked) {
+            let newImage = new Image();
+            evt.target.id === 'check1' ? newImage.src = '../static/images/phase1.png' : newImage.src = '../static/images/phase2.png';
+            evt.target.id === 'check1' ? imgMag1.image(newImage) : imgMag2.image(newImage);
+        }
+        else if (!evt.target.checked) {
+            let newImage = new Image();
+            evt.target.id === 'check1' ? newImage.src = '../static/images/mag1.png' : newImage.src = '../static/images/mag2.png';
+            evt.target.id === 'check1' ? imgMag1.image(newImage) : imgMag2.image(newImage);
+        }
+    }
+})
