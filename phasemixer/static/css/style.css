@@ -230,7 +230,7 @@ p{
 
 
 #button-1 .knobs:before {
-  content: "P";
+  content: "M";
   position: absolute;
   top: -4px;
   width: 14px;
@@ -252,7 +252,7 @@ p{
 }
 
 #button-1 .checkbox:checked + .knobs:before {
-  content: "M";
+  content: "P";
   top: 18px;
   background-color: #045f8d;
 }

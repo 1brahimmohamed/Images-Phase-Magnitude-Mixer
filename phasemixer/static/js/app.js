@@ -9,6 +9,8 @@ let originalImageOne = document.getElementById('konva-container-1'),
     drawingDivWidth = originalImageOne.offsetWidth,
     drawingDivHeight = originalImageOne.offsetHeight;
 
+let currentStage = 1;
+
 let index = 1;
 let wantToDraw = true;
 
@@ -26,10 +28,10 @@ for (let i = 0; i < 5; i++) {
     stages[i].add(layer);
 }
 
-const xSnaps = Math.round(stages[index].width() / 100);
-const ySnaps = Math.round(stages[index].height() / 100);
-const cellWidth = stages[0].width() / xSnaps;
-const cellHeight = stages[0].height() / ySnaps;
+// const xSnaps = Math.round(stages[index].width() / 100);
+// const ySnaps = Math.round(stages[index].height() / 100);
+// const cellWidth = stages[0].width() / xSnaps;
+// const cellHeight = stages[0].height() / ySnaps;
 
 
 // let imageObj = new Image();
@@ -50,6 +52,25 @@ const cellHeight = stages[0].height() / ySnaps;
 
 let mouseDownHandler = (event) => {
 
+
+    try {
+        let id = event.target.parent._id
+        console.log('gowa el try' , id)
+
+        if (id === 7)
+            currentStage = 1;
+        else if (id === 9)
+            currentStage = 3;
+    }
+    catch (e) {
+        console.log('gowa el catch')
+
+        if (event.target._id === 2)
+            currentStage = 1;
+        else
+            currentStage = 3;
+    }
+
     if (!wantToDraw)
         return;
 
@@ -58,8 +79,8 @@ let mouseDownHandler = (event) => {
 
     if (drawCircle === false) {
         objDraw = new Konva.Rect({
-            x: stages[index].getPointerPosition().x,
-            y: stages[index].getPointerPosition().y,
+            x: stages[currentStage].getPointerPosition().x,
+            y: stages[currentStage].getPointerPosition().y,
             width: 0,
             height: 0,
             fill: 'red',
@@ -69,8 +90,8 @@ let mouseDownHandler = (event) => {
         });
     } else {
         objDraw = new Konva.Circle({
-            x: stages[index].getPointerPosition().x,
-            y: stages[index].getPointerPosition().y,
+            x: stages[currentStage].getPointerPosition().x,
+            y: stages[currentStage].getPointerPosition().y,
             radiusX: 100,
             radiusY: 50,
             fill: 'red',
@@ -78,8 +99,7 @@ let mouseDownHandler = (event) => {
             opacity: 0.5,
         });
     }
-
-    layers[index].add(objDraw).batchDraw();
+   layers[currentStage].add(objDraw).batchDraw();
 }
 
 let mouseMoveHandler = (event) => {
@@ -92,17 +112,17 @@ let mouseMoveHandler = (event) => {
     }
 
     if (drawCircle === false) {
-        objDraw.width(stages[index].getPointerPosition().x - objDraw.x());
-        objDraw.height(stages[index].getPointerPosition().y - objDraw.y());
-        layers[0].batchDraw();
+        objDraw.width(stages[currentStage].getPointerPosition().x - objDraw.x());
+        objDraw.height(stages[currentStage].getPointerPosition().y - objDraw.y());
+        layers[currentStage].batchDraw();
     } else {
-        rise = Math.pow(stages[index].getPointerPosition().y - objDraw.y(), 2);
-        run = Math.pow(stages[index].getPointerPosition().x - objDraw.x(), 2);
+        rise = Math.pow(stages[currentStage].getPointerPosition().y - objDraw.y(), 2);
+        run = Math.pow(stages[currentStage].getPointerPosition().x - objDraw.x(), 2);
         const newRaduis = Math.sqrt(rise + run);
         objDraw.radius(newRaduis);
     }
 
-    layers[index].batchDraw()
+    layers[currentStage].batchDraw()
 }
 
 let mouseUpHandler = (event) => {
@@ -123,6 +143,7 @@ let mouseUpHandler = (event) => {
 
     isDrawing = false;
     shapes.push(objDraw);
+
     // console.log(`
     //         'x: ' + ${shapes[0].x()},
     //         'y: ' + ${shapes[0].y()},
@@ -160,39 +181,39 @@ let mouseUpHandler = (event) => {
                 return newPos;
             }
 
-            const closestX = Math.round(newPos.x / cellWidth) * cellWidth;
-            const diffX = Math.abs(newPos.x - closestX);
-
-            const closestY = Math.round(newPos.y / cellHeight) * cellHeight;
-            const diffY = Math.abs(newPos.y - closestY);
-
-            const snappedX = diffX < 10;
-            const snappedY = diffY < 10;
-
-            // a bit different snap strategies based on snap direction
-            // we need to reuse old position for better UX
-            if (snappedX && !snappedY) {
-                return {
-                    x: closestX,
-                    y: oldPos.y,
-                };
-            } else if (snappedY && !snappedX) {
-                return {
-                    x: oldPos.x,
-                    y: closestY,
-                };
-            } else if (snappedX && snappedY) {
-
-                return {
-                    x: closestX,
-                    y: closestY,
-                };
-            }
+            // const closestX = Math.round(newPos.x / cellWidth) * cellWidth;
+            // const diffX = Math.abs(newPos.x - closestX);
+            //
+            // const closestY = Math.round(newPos.y / cellHeight) * cellHeight;
+            // const diffY = Math.abs(newPos.y - closestY);
+            //
+            // const snappedX = diffX < 10;
+            // const snappedY = diffY < 10;
+            //
+            // // a bit different snap strategies based on snap direction
+            // // we need to reuse old position for better UX
+            // if (snappedX && !snappedY) {
+            //     return {
+            //         x: closestX,
+            //         y: oldPos.y,
+            //     };
+            // } else if (snappedY && !snappedX) {
+            //     return {
+            //         x: oldPos.x,
+            //         y: closestY,
+            //     };
+            // } else if (snappedX && snappedY) {
+            //
+            //     return {
+            //         x: closestX,
+            //         y: closestY,
+            //     };
+            // }
             return newPos;
         },
     });
 
-    layers[index].add(tr);
+    layers[currentStage].add(tr);
 
 
 }
@@ -200,5 +221,9 @@ let mouseUpHandler = (event) => {
 stages[index].on('mousedown', mouseDownHandler)
 stages[index].on('mousemove', mouseMoveHandler)
 stages[index].on('mouseup', mouseUpHandler)
+
+stages[index+2].on('mousedown', mouseDownHandler)
+stages[index+2].on('mousemove', mouseMoveHandler)
+stages[index+2].on('mouseup', mouseUpHandler)
 
 
