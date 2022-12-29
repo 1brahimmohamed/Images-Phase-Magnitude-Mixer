@@ -1,9 +1,10 @@
-let objDraw = null,                     // object to be drawn
-    isDrawing = false,                  // boolean to know if i am drawing
-    drawCircle = false,                 // boolean to toggle drawing shape (rectangle/cicle)
-    shapes = [],                        // array of drawn shapes
-    stages = [],                        // array of stages
-    layers = [];                        // array of layers[0]s
+let objDraw = null,                             // object to be drawn
+    isDrawing = false,                          // boolean to know if i am drawing
+    drawCircle = false,                         // boolean to toggle drawing shape (rectangle/circle)
+    shapesCanvas1 = [],                         // array of drawn shapes for the first canvas
+    shapesCanvas2 = [],                         // array of drawn shapes for the second canvas
+    stages = [],                                // array of stages
+    layers = [];                                // array of layers[0]s
 
 let originalImageOne = document.getElementById('konva-container-1'),
     drawingDivWidth = originalImageOne.offsetWidth,
@@ -52,7 +53,6 @@ for (let i = 0; i < 5; i++) {
 
 let mouseDownHandler = (event) => {
 
-
     try {
         let id = event.target.parent._id
         console.log('gowa el try' , id)
@@ -69,6 +69,15 @@ let mouseDownHandler = (event) => {
             currentStage = 1;
         else
             currentStage = 3;
+    }
+
+   let x_current = stages[currentStage].getPointerPosition().x,
+       y_current = stages[currentStage].getPointerPosition().y;
+
+    for (let i = 0; i < shapes.length; i++) {
+        if (shapes[i].x() < x_current && shapes[i].x() + shapes[i].width() > x_current && shapes[i].y() < y_current && shapes[i].y() + shapes[i].height() > y_current) {
+            wantToDraw = false;
+        }
     }
 
     if (!wantToDraw)
@@ -127,17 +136,17 @@ let mouseMoveHandler = (event) => {
 
 let mouseUpHandler = (event) => {
 
-
     if(!wantToDraw) {
         console.log(`
-            'x: ' + ${shapes[index].x()},
-            'y: ' + ${shapes[index].y()},
-            'rotation: ' + ${shapes[index].rotation()},
-            'width: ' + ${(shapes[index].width() * shapes[0].scaleX())},
-            'height: ' + ${shapes[index].height() * shapes[0].scaleY()},
-            'scaleX: ' + ${shapes[index].scaleX()},
-            'scaleY: ' + ${shapes[index].scaleY()},
+            'x: ' + ${shapes[0].x()},
+            'y: ' + ${shapes[0].y()},
+            'rotation: ' + ${shapes[0].rotation()},
+            'width: ' + ${(shapes[0].width() * shapes[0].scaleX())},
+            'height: ' + ${shapes[0].height() * shapes[0].scaleY()},
+            'scaleX: ' + ${shapes[0].scaleX()},
+            'scaleY: ' + ${shapes[0].scaleY()},
             `)
+        wantToDraw = true;
         return
     }
 
