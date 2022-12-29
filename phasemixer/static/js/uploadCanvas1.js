@@ -91,3 +91,14 @@ document.addEventListener('input', (evt) => {
     }
 })
 
+
+// toggle drawn shape
+document.addEventListener('click', (evt) => {
+    if (evt.target.matches('.nav-item')){
+        if (evt.target.querySelector('i').classList.contains('bx-circle'))
+            drawCircle = true;
+        else if (evt.target.querySelector('i').classList.contains('bx-rectangle'))
+            drawCircle = false;
+    }
+})
+
