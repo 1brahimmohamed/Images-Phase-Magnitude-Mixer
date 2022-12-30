@@ -7,7 +7,6 @@ let imageOriginalOne = new Image(),
     imgMag1 = new Image(),
     imgMag2 = new Image();
 
-
 // upload handling
 document.addEventListener('input', (evt) => {
     if (evt.target.matches('.upload-class')) {
@@ -96,12 +95,13 @@ document.addEventListener('input', (evt) => {
 document.addEventListener('click', (evt) => {
     if (evt.target.matches('.nav-item')){
         if (evt.target.querySelector('i').classList.contains('bx-circle'))
-            drawCircle = true;
+            circleDraw = true;
         else if (evt.target.querySelector('i').classList.contains('bx-rectangle'))
-            drawCircle = false;
+            circleDraw = false;
     }
 })
 
+// toggle the phase/magnitude preview
 document.addEventListener("change", (evt)=>{
     if (evt.target.matches('.checkbox')){
         if (evt.target.checked) {
