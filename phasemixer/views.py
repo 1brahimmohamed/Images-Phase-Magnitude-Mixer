@@ -5,8 +5,6 @@ from PIL import Image
 import json
 
 
-
-
 @csrf_protect
 @csrf_exempt
 def home(request):

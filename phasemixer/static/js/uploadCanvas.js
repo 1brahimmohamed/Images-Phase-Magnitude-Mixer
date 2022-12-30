@@ -2,8 +2,6 @@ let imageOriginalOne = new Image(),
     imageOriginalTwo = new Image(),
     imageMagOne = new Image(),
     imageMagTwo = new Image(),
-    imagePhaseOne = new Image(),
-    imagePhaseTwo = new Image(),
     imgMag1 = new Image(),
     imgMag2 = new Image();
 

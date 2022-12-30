@@ -13,9 +13,9 @@ let originalImageOne = document.getElementById('konva-container-1'),       // ge
 let currentStage = 1,                           // current stage I am drawing onto
     operatingShapes;                            // variable to hold array of target array of shapes
 
-const index = 1;
 let wantToDraw = true;                          // boolean to enable/disable drawing when moving shapes
 
+const index = 1;
 
 // Construct 6 Konva stages on each div
 for (let i = 1; i < 6; i++) {
@@ -34,12 +34,10 @@ for (let i = 0; i < 5; i++) {
     stages[i].add(layer);                       // add each layer to its corresponding stage
 }
 
-
-
 /**
  * Function which is executed when the user clicks on the canvas
- * Inputs: Mouse Event
- * Returns: None
+ * @param event
+ * @returns __
  **/
 let mouseDownHandler = (event) => {
 
@@ -75,14 +73,14 @@ let mouseDownHandler = (event) => {
 
 /**
  * Function which is executed when the user moves on the canvas
- * Inputs: Mouse Event
- * Returns: None
+ * @param event
+ * @returns boolean
  **/
 let mouseMoveHandler = (event) => {
 
     // if I don't want to draw then exit the function
     if (!wantToDraw)
-        return;
+        return false;
 
     if (!isDrawing) {
         return false;
@@ -103,15 +101,15 @@ let mouseMoveHandler = (event) => {
 }
 
 /**
- * function which is een when the user releases the mouse button
- * Inputs: Mouse Event
- * Returns: None
+ * function which is executed when the user releases the mouse button
+ * @param event
+ * @returns __
  **/
 let mouseUpHandler = (event) => {
 
     // if I move the shape then do nothing but enable drawing again
     if (!wantToDraw) {
-        let [reqDataCanvas1,reqDataCanvas2] = setUpRequestData();
+        let [reqDataCanvas1, reqDataCanvas2] = setUpRequestData();
         sendRequest(reqDataCanvas1, reqDataCanvas2, 1);
         wantToDraw = true;
         return
@@ -171,15 +169,15 @@ stages[index + 2].on('mousemove', mouseMoveHandler)
 stages[index + 2].on('mouseup', mouseUpHandler)
 
 
-
 /**
  * Function that checks if the mouse position is on one of our drawn shapes
- * Input: Current Mouse X Position, Current Mouse Y Position
- * Returns: Boolean (true if the mouse is not on one of our drawn shapes)
+ * @param x_current -> Current Mouse X Position
+ * @param y_current -> Current Mouse Y Position
+ * @returns {boolean} -> (true if the mouse is not on one of our drawn shapes)
  * Description: This function checks if the mouse position is on one of our drawn shapes by checking the position of
  * the mouse against the position of the shapes array. If the mouse is on one of our drawn shapes then we return false,
  **/
-const checkDraw = (x_current, y_current) =>{
+const checkDraw = (x_current, y_current) => {
 
     // check if the mouse position is on one of our drawn shapes
     for (let i = 0; i < operatingShapes.length; i++) {
@@ -196,8 +194,8 @@ const checkDraw = (x_current, y_current) =>{
 
 /**
  * Function to detect which canvas the user is drawing on
- * Input : Mouse Event
- * Returns: index of the stage
+ * @param event
+ * @returns {number} -> index of the stage
  * Description: the function checks the event object where it handles drawing on empty canvas and on image
  * first, try if there is a parent to the event (parent to image is our canvas)
  * if no errors then a picture exists then select by parent id
@@ -222,8 +220,14 @@ const detectCanvas = (event) => {
 
 /**
  * Function to draw a rectangle on the canvas
- * Input: x, y, width, height, color, draggable, opacity
- * Returns: Konva.Rect object
+ * @param rectX
+ * @param rectY
+ * @param rectWidth
+ * @param rectHeight
+ * @param rectFill
+ * @param rectDraggable
+ * @param rectOpacity
+ * @returns {Konva.Rect}
  **/
 const drawRectangle = (
     rectX,
@@ -232,7 +236,7 @@ const drawRectangle = (
     rectHeight = 0,
     rectFill = 'red',
     rectDraggable = true,
-    rectOpacity= 0.5
+    rectOpacity = 0.5
 ) => {
     return new Konva.Rect({
         x: rectX,
@@ -245,10 +249,17 @@ const drawRectangle = (
     });
 }
 
-/** Function to draw a circle on the canvas
- * Input: x, y, radiusX, radiusY, color, draggable, opacity
- * Returns: Konva.Circle object
- * **/
+/**
+ * Function to draw a circle on the canvas
+ * @param circX
+ * @param circY
+ * @param circRadiusX
+ * @param circRadiusY
+ * @param circFill
+ * @param circDraggable
+ * @param circOpacity
+ * @returns {Konva.Circle}
+ **/
 const drawCircle = (
     circX,
     circY,
@@ -256,7 +267,7 @@ const drawCircle = (
     circRadiusY = 50,
     circFill = 'red',
     circDraggable = true,
-    circOpacity= 0.5
+    circOpacity = 0.5
 ) => {
     return new Konva.Circle({
         x: circX,
@@ -269,20 +280,28 @@ const drawCircle = (
     });
 }
 
-const setUpRequestData = __ => {
+/**
+ * function to set up the request data from the Konva shapes' arrays
+ * @returns {Array, Array} -> 2 Arrays for canvas 1 & canvas 2
+ **/
+const setUpRequestData = () => {
     let shapes1 = [],
         shapes2 = [];
 
+    // loop through the shapes of canvas 1
+    // get X, Y, Width, Height only
     for (let i = 0; i < shapesCanvas1.length; i++) {
         let disShapes = {
-            x : shapesCanvas1[i].x(),
-            y : shapesCanvas1[i].y(),
-            width : shapesCanvas1[i].width(),
-            height : shapesCanvas1[i].height()
+            x: shapesCanvas1[i].x(),
+            y: shapesCanvas1[i].y(),
+            width: shapesCanvas1[i].width(),
+            height: shapesCanvas1[i].height()
         };
         shapes1.push(disShapes);
     }
 
+    // loop through the shapes of canvas 2
+    // get X, Y, Width, Height only
     for (let j = 0; j < shapesCanvas2.length; j++) {
         let disShapes = {
             x: shapesCanvas2[j].x(),
@@ -296,9 +315,17 @@ const setUpRequestData = __ => {
     return [shapes1, shapes2];
 }
 
+
+/**
+ * Function to send the request to the server
+ * @param canvas1ReqData
+ * @param canvas2ReqData
+ * @param mode
+ * @returns {Promise<void>}
+ */
 const sendRequest = (canvas1ReqData, canvas2ReqData, mode = 1) => {
 
-    fetch('http://127.0.0.1:8000/phasemixer/test',{
+    fetch('http://127.0.0.1:8000/phasemixer/test', {
         method: 'POST',
         headers: {
             "Content-Type": "application/json"
