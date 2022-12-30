@@ -9,7 +9,7 @@ from PIL import Image
 @csrf_protect
 @csrf_exempt
 def home(request):
-    return render(request, 'Home.html')
+    return render(request, 'home.html')
 
 
 
