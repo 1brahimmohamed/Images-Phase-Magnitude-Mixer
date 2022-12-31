@@ -1,6 +1,6 @@
 let objDraw = null,                             // object to be drawn
     isDrawing = false,                          // boolean to know if i am drawing
-    circleDraw = false,                         // boolean to toggle drawing shape (rectangle/circle)
+    circleDraw = true,                         // boolean to toggle drawing shape (rectangle/circle)
     shapesCanvas1 = [],                         // array of drawn operatingShapes for the first canvas
     shapesCanvas2 = [],                         // array of drawn operatingShapes for the second canvas
     stages = [],                                // array of stages
@@ -64,7 +64,7 @@ let mouseDownHandler = (event) => {
     if (circleDraw === false) {
         objDraw = drawRectangle(x_current, y_current);
     } else {
-        objDraw = drawCircle(x_current, y_current);
+        objDraw = drawEllipse(x_current, y_current);
     }
 
     layers[currentStage].add(objDraw).batchDraw();
@@ -91,10 +91,14 @@ let mouseMoveHandler = (event) => {
         objDraw.height(stages[currentStage].getPointerPosition().y - objDraw.y());
         layers[currentStage].batchDraw();
     } else {
-        rise = Math.pow(stages[currentStage].getPointerPosition().y - objDraw.y(), 2);
-        run = Math.pow(stages[currentStage].getPointerPosition().x - objDraw.x(), 2);
-        const newRaduis = Math.sqrt(rise + run);
-        objDraw.radius(newRaduis);
+        // rise = Math.pow(stages[currentStage].getPointerPosition().y - objDraw.y(), 2);
+        // run = Math.pow(stages[currentStage].getPointerPosition().x - objDraw.x(), 2);
+        // const newRaduis = Math.sqrt(rise + run);
+        // objDraw.radius(newRaduis);
+
+        objDraw.radiusX(stages[currentStage].getPointerPosition().x - objDraw.x());
+        objDraw.radiusY(stages[currentStage].getPointerPosition().y - objDraw.y());
+        layers[currentStage].batchDraw();
     }
 
     layers[currentStage].batchDraw()
@@ -109,10 +113,9 @@ let mouseUpHandler = (event) => {
 
     // if I move the shape then do nothing but enable drawing again
     if (!wantToDraw) {
-        let [reqDataCanvas1, reqDataCanvas2] = setUpRequestData();
-        sendRequest(reqDataCanvas1, reqDataCanvas2, 1);
+        sendRequest(shapesCanvas1, shapesCanvas1, 1);
         wantToDraw = true;
-        return
+        return;
     }
 
     isDrawing = false;                                       // disable drawing
@@ -145,11 +148,7 @@ let mouseUpHandler = (event) => {
 
     layers[currentStage].add(tr);
 
-    let [canvas1ReqData, canvas2ReqData] = setUpRequestData();
-
-    console.log(canvas1ReqData, canvas2ReqData)
-
-    sendRequest(canvas1ReqData, canvas2ReqData);
+    sendRequest(shapesCanvas1, shapesCanvas1, 1);
 }
 
 /**
@@ -178,14 +177,35 @@ stages[index + 2].on('mouseup', mouseUpHandler)
  * the mouse against the position of the shapes array. If the mouse is on one of our drawn shapes then we return false,
  **/
 const checkDraw = (x_current, y_current) => {
-
     // check if the mouse position is on one of our drawn shapes
     for (let i = 0; i < operatingShapes.length; i++) {
-        if (operatingShapes[i].x() < x_current &&
-            operatingShapes[i].x() + operatingShapes[i].width() > x_current &&
-            operatingShapes[i].y() < y_current &&
-            operatingShapes[i].y() + operatingShapes[i].height() > y_current) {
-            return false;                 // then I want to move the shape not to draw
+
+        console.log(shapesCanvas1)
+
+        if (operatingShapes[i].className === 'Rect') {
+            console.log('ana hena 2')
+            if (operatingShapes[i].x() <= x_current &&
+                operatingShapes[i].x() + operatingShapes[i].width() > x_current &&
+                operatingShapes[i].y() <= y_current &&
+                operatingShapes[i].y() + operatingShapes[i].height() > y_current) {
+
+                return false;                 // then I want to move the shape not to draw
+            }
+        }
+        else if (operatingShapes[i].className === 'Ellipse') {
+            console.log('ana hena 3')
+            let rx = operatingShapes[i].radiusX(),
+                ry = operatingShapes[i].radiusY(),
+                xCenter = operatingShapes[i].x(),
+                yCenter = operatingShapes[i].y();
+
+            if (x_current >= xCenter - rx &&
+                x_current < xCenter + rx &&
+                y_current >= yCenter - ry &&
+                y_current < yCenter + ry) {
+
+                return false;
+            }
         }
     }
     return true;                          // then I want to draw
@@ -258,18 +278,18 @@ const drawRectangle = (
  * @param circFill
  * @param circDraggable
  * @param circOpacity
- * @returns {Konva.Circle}
+ * @returns {Konva.Ellipse}
  **/
-const drawCircle = (
+const drawEllipse = (
     circX,
     circY,
-    circRadiusX = 100,
-    circRadiusY = 50,
+    circRadiusX = 0,
+    circRadiusY = 0,
     circFill = 'red',
     circDraggable = true,
     circOpacity = 0.5
 ) => {
-    return new Konva.Circle({
+    return new Konva.Ellipse({
         x: circX,
         y: circY,
         radiusX: circRadiusX,
@@ -307,42 +327,6 @@ const drawImage = (
 
 
 /**
- * function to set up the request data from the Konva shapes' arrays
- * @returns {Array, Array} -> 2 Arrays for canvas 1 & canvas 2
- **/
-const setUpRequestData = () => {
-    let shapes1 = [],
-        shapes2 = [];
-
-    // loop through the shapes of canvas 1
-    // get X, Y, Width, Height only
-    for (let i = 0; i < shapesCanvas1.length; i++) {
-        let disShapes = {
-            x: shapesCanvas1[i].x(),
-            y: shapesCanvas1[i].y(),
-            width: shapesCanvas1[i].width() * shapesCanvas1[i].scaleX(),
-            height: shapesCanvas1[i].height() * shapesCanvas1[i].scaleY(),
-        };
-        shapes1.push(disShapes);
-    }
-
-    // loop through the shapes of canvas 2
-    // get X, Y, Width, Height only
-    for (let j = 0; j < shapesCanvas2.length; j++) {
-        let disShapes = {
-            x: shapesCanvas2[j].x(),
-            y: shapesCanvas2[j].y(),
-            width: shapesCanvas2[j].width() * shapesCanvas2[j].scaleX(),
-            height: shapesCanvas2[j].height() * shapesCanvas2[j].scaleY(),
-        }
-        shapes2.push(disShapes);
-    }
-
-    return [shapes1, shapes2];
-}
-
-
-/**
  * Function to send the request to the server
  * @param canvas1ReqData
  * @param canvas2ReqData
@@ -351,8 +335,8 @@ const setUpRequestData = () => {
  */
 const sendRequest = (canvas1ReqData, canvas2ReqData, mode = 1) => {
 
-    if ((canvasPreviewMode1 && !canvasPreviewMode2) || (!canvasPreviewMode1 && canvasPreviewMode2)) {
-        fetch('http://127.0.0.1:8000/phasemixer/test', {
+    // if ((canvasPreviewMode1 && !canvasPreviewMode2) || (!canvasPreviewMode1 && canvasPreviewMode2)) {
+        fetch('http://127.0.0.1:7000/phasemixer/test', {
             method: 'POST',
             headers: {
                 "Content-Type": "application/json"
@@ -360,14 +344,14 @@ const sendRequest = (canvas1ReqData, canvas2ReqData, mode = 1) => {
             dataType: 'json',
             body: JSON.stringify({
                     mode: mode,
-                    canvasOneShapes: canvas1ReqData,
-                    canvasTwoShapes: canvas2ReqData,
+                    canvasOneShapes: shapesCanvas1,
+                    canvasTwoShapes: shapesCanvas2,
                 }
             )
         });
-    }
-    else{
-        // @TODO: add a message to the user that he should select a canvas to preview
-        console.log("Please select a canvas to preview");
-    }
+    // }
+    // else{
+    //     // @TODO: add a message to the user that he should select a canvas to preview
+    //     console.log("Please select a canvas to preview");
+    // }
 }
