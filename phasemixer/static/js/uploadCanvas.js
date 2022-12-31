@@ -3,26 +3,35 @@ let imageOriginalOne = new Image(),
     imageMagOne = new Image(),
     imageMagTwo = new Image(),
     imgMag1 = new Image(),
-    imgMag2 = new Image();
+    imgMag2 = new Image(),
+    canvasPreviewMode1 = true,
+    canvasPreviewMode2 = true;
 
 // upload handling
 document.addEventListener('input', (evt) => {
-    if (evt.target.matches('.upload-class')) {
-        let file = evt.target.files[0],
-            formData = new FormData();
 
+    // if the target element is input element
+    if (evt.target.matches('.upload-class')) {
+        let file = evt.target.files[0],         // get the file from the element
+            formData = new FormData();          // create a new form data object
+
+        // append the file to the form data object
         formData.append('file', file);
+
+        // select when to save the file to the server
         formData.append('location', evt.target.id === 'selectedFile' ? 'image1' : 'image2');
 
+        // send the server request
         axios.post('http://127.0.0.1:8000/phasemixer/upload', formData)
             .then((response) => {
-                console.log(response.data.Status);
 
                 let selectedImage,
                     magImage,
                     originalPos,
                     magPos;
 
+                // if the image is the first image toggle the first canvas
+                // else toggle the second canvas
                 if (evt.target.id === 'selectedFile') {
                     imageOriginalOne.src = '../static/images/image1.png';
                     imageMagOne.src = '../static/images/mag1.png';
@@ -31,25 +40,12 @@ document.addEventListener('input', (evt) => {
                     originalPos = 0;
                     magPos = 1;
 
-
-                    let img = new Konva.Image({
-                        x: 0,
-                        y: 0,
-                        image: selectedImage,
-                        width: drawingDivWidth,
-                        height: drawingDivHeight,
-                    });
-
+                    // add image to canvas 1 (original image 1)
+                    let img = drawImage(selectedImage);
                     layers[originalPos].add(img);
 
-                    imgMag1 = new Konva.Image({
-                        x: 0,
-                        y: 0,
-                        image: magImage,
-                        width: drawingDivWidth,
-                        height: drawingDivHeight,
-                    });
-
+                    // add image to canvas 2 (phase/magnitude image 1)
+                    imgMag1 = drawImage(magImage);
                     layers[magPos].add(imgMag1);
 
                 } else {
@@ -60,26 +56,13 @@ document.addEventListener('input', (evt) => {
                     originalPos = 2;
                     magPos = 3;
 
-                    imgMag2 = new Konva.Image({
-                        x: 0,
-                        y: 0,
-                        image: magImage,
-                        width: drawingDivWidth,
-                        height: drawingDivHeight,
-                    });
-
-                    layers[magPos].add(imgMag2);
-
-                    let img = new Konva.Image({
-                        x: 0,
-                        y: 0,
-                        image: selectedImage,
-                        width: drawingDivWidth,
-                        height: drawingDivHeight,
-                    });
-
+                    // add image to canvas 3 (original image 2)
+                    let img = drawImage(selectedImage);
                     layers[originalPos].add(img);
 
+                    // add image to canvas 4 (phase/magnitude image 2)
+                    imgMag2 = drawImage(magImage);
+                    layers[magPos].add(imgMag2);
                 }
             })
             .catch((err) => {
@@ -91,9 +74,14 @@ document.addEventListener('input', (evt) => {
 
 // toggle drawn shape
 document.addEventListener('click', (evt) => {
+
+    // if the target element is navigation element
     if (evt.target.matches('.nav-item')){
+
+        // check if it is the circle button
         if (evt.target.querySelector('i').classList.contains('bx-circle'))
             circleDraw = true;
+        // check if it is the square button
         else if (evt.target.querySelector('i').classList.contains('bx-rectangle'))
             circleDraw = false;
     }
@@ -101,16 +89,23 @@ document.addEventListener('click', (evt) => {
 
 // toggle the phase/magnitude preview
 document.addEventListener("change", (evt)=>{
+
+    // if the target element is the checkbox
     if (evt.target.matches('.checkbox')){
+        // if the checkbox is checked toggle the phase/magnitude preview
         if (evt.target.checked) {
             let newImage = new Image();
             evt.target.id === 'check1' ? newImage.src = '../static/images/phase1.png' : newImage.src = '../static/images/phase2.png';
             evt.target.id === 'check1' ? imgMag1.image(newImage) : imgMag2.image(newImage);
+            evt.target.id === 'check1' ? canvasPreviewMode1 = false : canvasPreviewMode2 = false;
         }
         else if (!evt.target.checked) {
             let newImage = new Image();
             evt.target.id === 'check1' ? newImage.src = '../static/images/mag1.png' : newImage.src = '../static/images/mag2.png';
             evt.target.id === 'check1' ? imgMag1.image(newImage) : imgMag2.image(newImage);
+            evt.target.id === 'check1' ? canvasPreviewMode1 = true : canvasPreviewMode2 = true;
         }
     }
 })
+
+

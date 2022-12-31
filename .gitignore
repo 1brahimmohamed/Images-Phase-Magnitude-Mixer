@@ -2,11 +2,6 @@ server/__pycache__/
 phasemixer/__pycache__/
 phasemixer/migrations/__pycache__/
 .idea/
-phasemixer/static/images/image1.png/
-phasemixer/static/images/image2.png/
-phasemixer/static/images/mag1.png/
-phasemixer/static/images/mag2.png/
-phasemixer/static/images/phase1.png/
-phasemixer/static/images/phase2.png/
+phasemixer/static/images/
 
 *.sqlite

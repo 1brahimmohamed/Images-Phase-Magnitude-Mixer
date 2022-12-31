@@ -281,6 +281,32 @@ const drawCircle = (
 }
 
 /**
+ * Function to draw Image on the canvas
+ * @param imgObj
+ * @param imgX
+ * @param imgY
+ * @param imgWidth
+ * @param imgHeight
+ * @returns {Konva.Image}
+ **/
+const drawImage = (
+    imgObj,
+    imgX = 0,
+    imgY = 0,
+    imgWidth = drawingDivWidth,
+    imgHeight = drawingDivHeight
+) => {
+    return new Konva.Image({
+        x: imgX,
+        y: imgY,
+        image: imgObj,
+        width: imgWidth,
+        height: imgHeight,
+    });
+}
+
+
+/**
  * function to set up the request data from the Konva shapes' arrays
  * @returns {Array, Array} -> 2 Arrays for canvas 1 & canvas 2
  **/
@@ -294,8 +320,8 @@ const setUpRequestData = () => {
         let disShapes = {
             x: shapesCanvas1[i].x(),
             y: shapesCanvas1[i].y(),
-            width: shapesCanvas1[i].width(),
-            height: shapesCanvas1[i].height()
+            width: shapesCanvas1[i].width() * shapesCanvas1[i].scaleX(),
+            height: shapesCanvas1[i].height() * shapesCanvas1[i].scaleY(),
         };
         shapes1.push(disShapes);
     }
@@ -306,8 +332,8 @@ const setUpRequestData = () => {
         let disShapes = {
             x: shapesCanvas2[j].x(),
             y: shapesCanvas2[j].y(),
-            width: shapesCanvas2[j].width(),
-            height: shapesCanvas2[j].height()
+            width: shapesCanvas2[j].width() * shapesCanvas2[j].scaleX(),
+            height: shapesCanvas2[j].height() * shapesCanvas2[j].scaleY(),
         }
         shapes2.push(disShapes);
     }
@@ -325,17 +351,23 @@ const setUpRequestData = () => {
  */
 const sendRequest = (canvas1ReqData, canvas2ReqData, mode = 1) => {
 
-    fetch('http://127.0.0.1:8000/phasemixer/test', {
-        method: 'POST',
-        headers: {
-            "Content-Type": "application/json"
-        },
-        dataType: 'json',
-        body: JSON.stringify({
-                mode: mode,
-                canvasOneShapes: canvas1ReqData,
-                canvasTwoShapes: canvas2ReqData,
-            }
-        )
-    });
+    if ((canvasPreviewMode1 && !canvasPreviewMode2) || (!canvasPreviewMode1 && canvasPreviewMode2)) {
+        fetch('http://127.0.0.1:8000/phasemixer/test', {
+            method: 'POST',
+            headers: {
+                "Content-Type": "application/json"
+            },
+            dataType: 'json',
+            body: JSON.stringify({
+                    mode: mode,
+                    canvasOneShapes: canvas1ReqData,
+                    canvasTwoShapes: canvas2ReqData,
+                }
+            )
+        });
+    }
+    else{
+        // @TODO: add a message to the user that he should select a canvas to preview
+        console.log("Please select a canvas to preview");
+    }
 }
