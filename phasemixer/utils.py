@@ -3,7 +3,7 @@ import numpy as np
 
 
 def crop_img(arr, img, tuple, id=0):  # Default crop is rectangle
-    refactored_indices = refactor_indices(tuple)
+    refactored_indices = refactor_shapes(tuple)
     img_mask = Image.new("L", img.size)
     img_draw = ImageDraw.Draw(img_mask)
     if id == 1:
@@ -15,6 +15,6 @@ def crop_img(arr, img, tuple, id=0):  # Default crop is rectangle
     return arr_cropped
 
 
-def refactor_indices(indices):
-    refactored_indices = indices
-    return refactored_indices
+def refactor_shapes(shapes):
+    refactored_shapes = shapes
+    return refactored_shapes
