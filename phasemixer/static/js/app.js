@@ -17,6 +17,8 @@ let wantToDraw = true;                          // boolean to enable/disable dra
 
 const index = 1;
 
+let modes = ['all', 'intersect', 'difference'];
+let mode = modes[0];
 
 // Construct 6 Konva stages on each div
 for (let i = 1; i < 6; i++) {
@@ -113,7 +115,7 @@ let mouseUpHandler = (event) => {
 
     // if I move the shape then do nothing but enable drawing again
     if (!wantToDraw) {
-        sendRequest(shapesCanvas1, shapesCanvas1, 1);
+        sendRequest(shapesCanvas1, shapesCanvas1, mode);
         wantToDraw = true;
         return;
     }
@@ -157,7 +159,7 @@ let mouseUpHandler = (event) => {
 
     layers[currentStage].add(tr);
 
-    sendRequest(shapesCanvas1, shapesCanvas1, 1);
+    sendRequest(shapesCanvas1, shapesCanvas1, mode);
 }
 
 /**

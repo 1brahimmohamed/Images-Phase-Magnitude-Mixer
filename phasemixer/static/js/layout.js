@@ -1,26 +1,23 @@
-const sidebar = document.querySelector('.sidebar');
-const navItems = document.querySelectorAll('nav .nav-item');
-const toggle = document.querySelector('.sidebar .toggle');
+const navItemsUp = document.querySelectorAll('.navi');
+const navItemsDown = document.querySelectorAll('.navo');
 
-toggle.addEventListener('click', () => {
-
-    if (sidebar.className === 'sidebar')
-        sidebar.classList.add('open');
-    else
-        sidebar.classList.remove('open');
-
-});
-
-navItems.forEach(navItem => {
-
-    navItem.addEventListener('click', () => {
-
-        navItems.forEach(navItem => {
+navItemsUp.forEach(navItemUpper => {
+    navItemUpper.addEventListener('click', () => {
+        navItemsUp.forEach(navItem => {
             navItem.classList.remove('active');
         });
 
-        navItem.classList.add('active');
-
+        navItemUpper.classList.add('active');
     });
 
+});
+
+navItemsDown.forEach(navItemDown => {
+    navItemDown.addEventListener('click', () => {
+        navItemsDown.forEach(navItem => {
+            navItem.classList.remove('active');
+        });
+
+        navItemDown.classList.add('active');
+    });
 });

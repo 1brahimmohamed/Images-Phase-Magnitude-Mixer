@@ -87,6 +87,7 @@ document.addEventListener('click', (evt) => {
         // check if it is the square button
         else if (evt.target.querySelector('i').classList.contains('bx-rectangle'))
             circleDraw = false;
+
     }
 })
 

@@ -36,8 +36,8 @@ p{
   grid-template-columns: 0.2fr 1fr 0.1fr 1fr 1fr;
   grid-template-rows:  1fr 1fr;
   grid-template-areas:
-    "sidebar content1 controls-bar content2 output"
-    "sidebar content3 controls-bar content4 output";
+    "menu1 content1 controls-bar content2 output"
+    "menu2 content3 controls-bar content4 output";
   grid-gap: 1.5rem;
   font-weight: 800;
   font-size: 18px;
@@ -49,10 +49,8 @@ p{
 
 /*** Side control menu ***/
 .sidebar {
-  grid-area: sidebar;
-  margin-top: 150px;
   width: 50px;
-  height: 320px;
+  height: fit-content;
   backdrop-filter: blur(6px);
   -webkit-backdrop-filter: blur(6px);
   background: rgba(255, 255, 255, 0.65);
@@ -63,7 +61,18 @@ p{
   border-radius: 100px;
 }
 
-.sidebar nav .nav-item {
+#menu1{
+  grid-area: menu1;
+  margin-top: 225px;
+}
+
+#menu2{
+  grid-area: menu2;
+  margin-top: -10px;
+
+}
+
+#menu1 nav .nav-item {
   cursor: pointer;
   display: flex;
   align-items: center;
@@ -75,19 +84,47 @@ p{
   color: rgb(0, 0, 0);
   transition: .3s;
 }
-.sidebar nav .nav-item i {
+#menu1 nav .nav-item i {
   font-size: 26px;
 }
 
-.sidebar nav .nav-item.active {
+#menu1 nav .nav-item.active {
   background: rgba(0, 0, 0, 0.1) !important;
   width: 26px;
   height: 40px;
 }
 
-.sidebar nav .nav-item:hover {
+#menu1 nav .nav-item:hover {
   background: rgba(255, 255, 255, .1);
 }
+
+#menu2 nav .nav-item {
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  border-radius: 4px;
+  margin-left: -26px;
+  margin-top: 5px;
+  width: 26px;
+  height: 56px;
+  color: rgb(0, 0, 0);
+  transition: .3s;
+}
+
+#menu2 nav .nav-item i {
+  font-size: 26px;
+}
+
+#menu2 nav .nav-item.active {
+  background: rgba(0, 0, 0, 0.1) !important;
+  width: 26px;
+  height: 40px;
+}
+
+#menu2 nav .nav-item:hover {
+  background: rgba(255, 255, 255, .1);
+}
+
 
 
 /*** Boxes ***/
