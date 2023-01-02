@@ -111,21 +111,19 @@ let mouseMoveHandler = (event) => {
  **/
 let mouseUpHandler = (event) => {
 
-
-    if (objDraw.height() < 0 || objDraw.width() < 0){
-        objDraw.x(objDraw.x() + objDraw.width())
-        objDraw.y(objDraw.y() + objDraw.height())
-        objDraw.width(Math.abs(objDraw.width()))
-        objDraw.height(Math.abs(objDraw.height()))
-    }
-
-    console.log(objDraw)
-
     // if I move the shape then do nothing but enable drawing again
     if (!wantToDraw) {
         sendRequest(shapesCanvas1, shapesCanvas1, 1);
         wantToDraw = true;
         return;
+    }
+
+    // to normalize the inputs if the user draw it backward
+    if (objDraw.width() < 0 || objDraw.height() < 0){
+        objDraw.x(objDraw.x() + objDraw.width())
+        objDraw.y(objDraw.y() + objDraw.height())
+        objDraw.width(Math.abs(objDraw.width()))
+        objDraw.height(Math.abs(objDraw.height()))
     }
 
 
