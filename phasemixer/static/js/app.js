@@ -17,8 +17,10 @@ let wantToDraw = true;                          // boolean to enable/disable dra
 
 const index = 1;
 
-let modes = ['all', 'intersect', 'difference','uni-phase', 'uni-mag'];
-let mode = modes[0];
+let modes = ['all', 'intersect', 'difference'],             // modes of operation
+    phases = ['false','uni-phase', 'uni-mag'];              // phase mixing modes
+
+let mode = modes[0];                // default mode is all
 
 // Construct 6 Konva stages on each div
 for (let i = 1; i < 6; i++) {
@@ -42,7 +44,7 @@ for (let i = 0; i < 5; i++) {
  * @param event
  * @returns __
  **/
-let mouseDownHandler = (event) => {
+const mouseDownHandler = (event) => {
 
     // first we need detect which canvas we are attempting to use
     currentStage = detectCanvas(event);
@@ -79,7 +81,7 @@ let mouseDownHandler = (event) => {
  * @param event
  * @returns boolean
  **/
-let mouseMoveHandler = (event) => {
+const mouseMoveHandler = (event) => {
 
     // if I don't want to draw then exit the function
     if (!wantToDraw)
@@ -94,10 +96,6 @@ let mouseMoveHandler = (event) => {
         objDraw.height(stages[currentStage].getPointerPosition().y - objDraw.y());
         layers[currentStage].batchDraw();
     } else {
-        // rise = Math.pow(stages[currentStage].getPointerPosition().y - objDraw.y(), 2);
-        // run = Math.pow(stages[currentStage].getPointerPosition().x - objDraw.x(), 2);
-        // const newRaduis = Math.sqrt(rise + run);
-        // objDraw.radius(newRaduis);
         objDraw.radiusX(Math.abs(stages[currentStage].getPointerPosition().x - objDraw.x()));
         objDraw.radiusY(Math.abs(stages[currentStage].getPointerPosition().y - objDraw.y()));
         layers[currentStage].batchDraw();
@@ -111,7 +109,7 @@ let mouseMoveHandler = (event) => {
  * @param event
  * @returns __
  **/
-let mouseUpHandler = (event) => {
+const mouseUpHandler = (event) => {
 
     // if I move the shape then do nothing but enable drawing again
     if (!wantToDraw) {
@@ -121,11 +119,16 @@ let mouseUpHandler = (event) => {
     }
 
     // to normalize the inputs if the user draw it backward
-    if (objDraw.width() < 0 || objDraw.height() < 0){
+    if (objDraw.width() < 0 && objDraw.height() < 0){
+
         objDraw.x(objDraw.x() + objDraw.width())
         objDraw.y(objDraw.y() + objDraw.height())
         objDraw.width(Math.abs(objDraw.width()))
         objDraw.height(Math.abs(objDraw.height()))
+    }
+    else if (objDraw.width() < 0){
+        objDraw.x(objDraw.x() + objDraw.width())
+        objDraw.width(Math.abs(objDraw.width()))
     }
 
 
@@ -204,7 +207,7 @@ const checkDraw = (x_current, y_current) => {
             }
         }
         else if (operatingShapes[i].className === 'Ellipse') {
-            console.log('ana hena 3')
+
             let rx = operatingShapes[i].radiusX(),
                 ry = operatingShapes[i].radiusY(),
                 xCenter = operatingShapes[i].x(),
@@ -357,6 +360,12 @@ const sendRequest = __ => {
                     canvasTwoShapes: shapesCanvas2,
                 }
             )
-        });
+        }).then(response => {
+            let image = new Image();
+            image.src = 'https://picsum.photos/500';
+            let img = drawImage(image);
+            console.log(img)
+            layers[4].add(img);
+        })
     // }
 }

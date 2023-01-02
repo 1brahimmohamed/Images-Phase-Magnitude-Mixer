@@ -75,30 +75,6 @@ document.addEventListener('input', (evt) => {
 })
 
 
-// toggle drawn shape
-document.addEventListener('click', (evt) => {
-
-    // if the target element is navigation element
-    if (evt.target.matches('.nav-item')){
-
-        // check if it is the circle button
-        if (evt.target.querySelector('i').classList.contains('bx-circle'))
-            circleDraw = true;
-        // check if it is the square button
-        else if (evt.target.querySelector('i').classList.contains('bx-rectangle'))
-            circleDraw = false;
-
-        if (evt.target.querySelector('i').classList.contains('bx-merge'))
-            mode = modes[0]
-        else if (evt.target.querySelector('i').classList.contains('bx-intersect'))
-            mode = modes[1]
-        else if (evt.target.querySelector('i').classList.contains('bx-minus-front'))
-            mode = modes[2]
-
-        console.log(mode)
-    }
-})
-
 // toggle the phase/magnitude preview
 document.addEventListener("change", (evt)=>{
 
