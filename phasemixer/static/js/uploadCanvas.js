@@ -88,6 +88,14 @@ document.addEventListener('click', (evt) => {
         else if (evt.target.querySelector('i').classList.contains('bx-rectangle'))
             circleDraw = false;
 
+        if (evt.target.querySelector('i').classList.contains('bx-merge'))
+            mode = modes[0]
+        else if (evt.target.querySelector('i').classList.contains('bx-intersect'))
+            mode = modes[1]
+        else if (evt.target.querySelector('i').classList.contains('bx-minus-front'))
+            mode = modes[2]
+
+        console.log(mode)
     }
 })
 

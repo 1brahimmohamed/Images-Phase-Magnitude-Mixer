@@ -17,7 +17,7 @@ let wantToDraw = true;                          // boolean to enable/disable dra
 
 const index = 1;
 
-let modes = ['all', 'intersect', 'difference'];
+let modes = ['all', 'intersect', 'difference','uni-phase', 'uni-mag'];
 let mode = modes[0];
 
 // Construct 6 Konva stages on each div
@@ -115,7 +115,7 @@ let mouseUpHandler = (event) => {
 
     // if I move the shape then do nothing but enable drawing again
     if (!wantToDraw) {
-        sendRequest(shapesCanvas1, shapesCanvas1, mode);
+        sendRequest(shapesCanvas1, shapesCanvas2, mode);
         wantToDraw = true;
         return;
     }
@@ -159,7 +159,7 @@ let mouseUpHandler = (event) => {
 
     layers[currentStage].add(tr);
 
-    sendRequest(shapesCanvas1, shapesCanvas1, mode);
+    sendRequest(shapesCanvas1, shapesCanvas2, mode);
 }
 
 /**
@@ -339,14 +339,11 @@ const drawImage = (
 
 /**
  * Function to send the request to the server
- * @param canvas1ReqData
- * @param canvas2ReqData
- * @param mode
  * @returns {Promise<void>}
  */
-const sendRequest = (canvas1ReqData, canvas2ReqData, mode = 1) => {
+const sendRequest = __ => {
 
-    if ((canvasPreviewMode1 && !canvasPreviewMode2) || (!canvasPreviewMode1 && canvasPreviewMode2)) {
+    // if ((canvasPreviewMode1 && !canvasPreviewMode2) || (!canvasPreviewMode1 && canvasPreviewMode2)) {
         fetch('http://127.0.0.1:7000/phasemixer/test', {
             method: 'POST',
             headers: {
@@ -355,14 +352,11 @@ const sendRequest = (canvas1ReqData, canvas2ReqData, mode = 1) => {
             dataType: 'json',
             body: JSON.stringify({
                     mode: mode,
+                    phase: check1.checked ? 'Canvas1': 'Canvas2',
                     canvasOneShapes: shapesCanvas1,
                     canvasTwoShapes: shapesCanvas2,
                 }
             )
         });
-    }
-    else{
-        // @TODO: add a message to the user that he should select a canvas to preview
-        console.log("Please select a canvas to preview");
-    }
+    // }
 }

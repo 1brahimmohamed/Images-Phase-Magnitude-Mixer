@@ -21,6 +21,7 @@ def test(request):
         print(req['canvasTwoShapes'])
         print('-'*50, 'req end', '-'*50)
         print(req['mode'])
+        print(req['phase'])
         return JsonResponse({'success': 'ok'})
 
 @csrf_protect
