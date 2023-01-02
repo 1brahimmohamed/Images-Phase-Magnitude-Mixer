@@ -20,6 +20,7 @@ def test(request):
         print('-'*50, 'Can 2', '-'*50)
         print(req['canvasTwoShapes'])
         print('-'*50, 'req end', '-'*50)
+        print(req['mode'])
         return JsonResponse({'success': 'ok'})
 
 @csrf_protect

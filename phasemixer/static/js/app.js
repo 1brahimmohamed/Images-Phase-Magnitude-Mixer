@@ -1,6 +1,6 @@
 let objDraw = null,                             // object to be drawn
     isDrawing = false,                          // boolean to know if i am drawing
-    circleDraw = true,                         // boolean to toggle drawing shape (rectangle/circle)
+    circleDraw = false,                         // boolean to toggle drawing shape (rectangle/circle)
     shapesCanvas1 = [],                         // array of drawn operatingShapes for the first canvas
     shapesCanvas2 = [],                         // array of drawn operatingShapes for the second canvas
     stages = [],                                // array of stages
@@ -16,6 +16,7 @@ let currentStage = 1,                           // current stage I am drawing on
 let wantToDraw = true;                          // boolean to enable/disable drawing when moving shapes
 
 const index = 1;
+
 
 // Construct 6 Konva stages on each div
 for (let i = 1; i < 6; i++) {
@@ -95,9 +96,8 @@ let mouseMoveHandler = (event) => {
         // run = Math.pow(stages[currentStage].getPointerPosition().x - objDraw.x(), 2);
         // const newRaduis = Math.sqrt(rise + run);
         // objDraw.radius(newRaduis);
-
-        objDraw.radiusX(stages[currentStage].getPointerPosition().x - objDraw.x());
-        objDraw.radiusY(stages[currentStage].getPointerPosition().y - objDraw.y());
+        objDraw.radiusX(Math.abs(stages[currentStage].getPointerPosition().x - objDraw.x()));
+        objDraw.radiusY(Math.abs(stages[currentStage].getPointerPosition().y - objDraw.y()));
         layers[currentStage].batchDraw();
     }
 
@@ -111,12 +111,23 @@ let mouseMoveHandler = (event) => {
  **/
 let mouseUpHandler = (event) => {
 
+
+    if (objDraw.height() < 0 || objDraw.width() < 0){
+        objDraw.x(objDraw.x() + objDraw.width())
+        objDraw.y(objDraw.y() + objDraw.height())
+        objDraw.width(Math.abs(objDraw.width()))
+        objDraw.height(Math.abs(objDraw.height()))
+    }
+
+    console.log(objDraw)
+
     // if I move the shape then do nothing but enable drawing again
     if (!wantToDraw) {
         sendRequest(shapesCanvas1, shapesCanvas1, 1);
         wantToDraw = true;
         return;
     }
+
 
     isDrawing = false;                                       // disable drawing
 
@@ -335,7 +346,7 @@ const drawImage = (
  */
 const sendRequest = (canvas1ReqData, canvas2ReqData, mode = 1) => {
 
-    // if ((canvasPreviewMode1 && !canvasPreviewMode2) || (!canvasPreviewMode1 && canvasPreviewMode2)) {
+    if ((canvasPreviewMode1 && !canvasPreviewMode2) || (!canvasPreviewMode1 && canvasPreviewMode2)) {
         fetch('http://127.0.0.1:7000/phasemixer/test', {
             method: 'POST',
             headers: {
@@ -349,9 +360,9 @@ const sendRequest = (canvas1ReqData, canvas2ReqData, mode = 1) => {
                 }
             )
         });
-    // }
-    // else{
-    //     // @TODO: add a message to the user that he should select a canvas to preview
-    //     console.log("Please select a canvas to preview");
-    // }
+    }
+    else{
+        // @TODO: add a message to the user that he should select a canvas to preview
+        console.log("Please select a canvas to preview");
+    }
 }

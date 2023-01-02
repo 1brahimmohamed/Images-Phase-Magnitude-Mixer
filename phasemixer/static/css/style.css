@@ -230,7 +230,7 @@ p{
 
 
 #button-1 .knobs:before {
-  content: "M";
+  content: "P";
   position: absolute;
   top: -4px;
   width: 14px;
@@ -252,7 +252,7 @@ p{
 }
 
 #button-1 .checkbox:checked + .knobs:before {
-  content: "P";
+  content: "M";
   top: 18px;
   background-color: #045f8d;
 }
@@ -264,6 +264,45 @@ p{
 #button-1 .knobs,
 #button-1 .knobs:before,
 #button-1 .layer {
+  transition: 0.3s ease all;
+}
+
+
+#button-2 .knobs:before {
+  content: "M";
+  position: absolute;
+  top: -4px;
+  width: 14px;
+  height: 5px;
+  color: #fff;
+  font-size: 10px;
+  font-weight: bold;
+  text-align: center;
+  line-height: 1;
+  padding: 9px 4px;
+  left: 26px;
+  background-color: #000000;
+  border-radius: 50%;
+  transition: 0.3s cubic-bezier(0.18, 0.89, 0.35, 1.15) all;
+}
+
+#button-2 .layer{
+  background-color:rgb(176, 176, 176);
+}
+
+#button-2 .checkbox:checked + .knobs:before {
+  content: "P";
+  top: 18px;
+  background-color: #045f8d;
+}
+
+#button-2 .checkbox:checked ~ .layer {
+  background-color: rgba(192,229,246,1);
+}
+
+#button-2 .knobs,
+#button-2 .knobs:before,
+#button-2 .layer {
   transition: 0.3s ease all;
 }
 

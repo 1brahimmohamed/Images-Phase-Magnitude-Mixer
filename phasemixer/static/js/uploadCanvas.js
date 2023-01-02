@@ -7,6 +7,9 @@ let imageOriginalOne = new Image(),
     canvasPreviewMode1 = true,
     canvasPreviewMode2 = true;
 
+let check1 = document.getElementById('check1'),
+    check2 = document.getElementById('check2');
+
 // upload handling
 document.addEventListener('input', (evt) => {
 
@@ -22,7 +25,7 @@ document.addEventListener('input', (evt) => {
         formData.append('location', evt.target.id === 'selectedFile' ? 'image1' : 'image2');
 
         // send the server request
-        axios.post('http://127.0.0.1:8000/phasemixer/upload', formData)
+        axios.post('http://127.0.0.1:7000/phasemixer/upload', formData)
             .then((response) => {
 
                 let selectedImage,
@@ -50,7 +53,7 @@ document.addEventListener('input', (evt) => {
 
                 } else {
                     imageOriginalTwo.src = '../static/images/image2.png';
-                    imageMagTwo.src = '../static/images/mag2.png';
+                    imageMagTwo.src = '../static/images/phase2.png';
                     selectedImage = imageOriginalTwo;
                     magImage = imageMagTwo;
                     originalPos = 2;
@@ -94,16 +97,50 @@ document.addEventListener("change", (evt)=>{
     if (evt.target.matches('.checkbox')){
         // if the checkbox is checked toggle the phase/magnitude preview
         if (evt.target.checked) {
-            let newImage = new Image();
-            evt.target.id === 'check1' ? newImage.src = '../static/images/phase1.png' : newImage.src = '../static/images/phase2.png';
-            evt.target.id === 'check1' ? imgMag1.image(newImage) : imgMag2.image(newImage);
-            evt.target.id === 'check1' ? canvasPreviewMode1 = false : canvasPreviewMode2 = false;
+            let newImage1 = new Image(),
+                newImage2 = new Image();
+
+
+            if (evt.target.id === 'check1'){
+                newImage1.src = '../static/images/phase1.png'
+                newImage2.src = '../static/images/mag2.png'
+                imgMag1.image(newImage1)
+                imgMag2.image(newImage2)
+                canvasPreviewMode1 = false
+                check2.checked = true
+                console.log(check1.checked, check2.checked)
+
+            } else {
+                newImage1.src = '../static/images/phase1.png'
+                newImage2.src = '../static/images/mag2.png'
+                imgMag1.image(newImage1)
+                imgMag2.image(newImage2)
+                canvasPreviewMode2 = false
+                check1.checked = true
+                console.log(check1.checked, check2.checked)
+
+
+            }
         }
         else if (!evt.target.checked) {
-            let newImage = new Image();
-            evt.target.id === 'check1' ? newImage.src = '../static/images/mag1.png' : newImage.src = '../static/images/mag2.png';
-            evt.target.id === 'check1' ? imgMag1.image(newImage) : imgMag2.image(newImage);
-            evt.target.id === 'check1' ? canvasPreviewMode1 = true : canvasPreviewMode2 = true;
+            let newImage1 = new Image(),
+                newImage2 = new Image();
+
+            if (evt.target.id === 'check1'){
+                newImage1.src = '../static/images/mag1.png'
+                newImage2.src = '../static/images/phase2.png'
+                imgMag1.image(newImage1)
+                imgMag2.image(newImage2)
+                canvasPreviewMode1 = true
+                check2.checked = false
+            } else {
+                newImage1.src = '../static/images/mag1.png'
+                newImage2.src = '../static/images/phase2.png'
+                imgMag1.image(newImage1)
+                imgMag2.image(newImage2)
+                canvasPreviewMode2 = true
+                check1.checked = false
+            }
         }
     }
 })
