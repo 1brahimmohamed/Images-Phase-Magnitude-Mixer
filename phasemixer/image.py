@@ -5,7 +5,7 @@ from matplotlib import pyplot as plt
 
 class ImageMain:
     Image_Size = (1000, 1000)
-    Path_Img = "A:\\Professional\\Phase-Mixer\\phasemixer\\static\\images\\"
+    Path_Img = "phasemixer\\static\\images\\"
 
     def __init__(self, img_url: str):
         self.__img_url = img_url
