@@ -1,6 +1,10 @@
 const navItemsUp = document.querySelectorAll('.navi');
 const navItemsDown = document.querySelectorAll('.navo');
 
+
+let uniCanvas1 = false;
+let uniCanvas2 = false;
+
 navItemsUp.forEach(navItemUpper => {
     navItemUpper.addEventListener('click', () => {
         navItemsUp.forEach(navItem => {
@@ -48,16 +52,39 @@ document.addEventListener('click', (evt) => {
 })
 
 
-
 document.addEventListener('click', (evt) => {
     if (evt.target.matches('.disable')){
-        // if (evt.target.querySelector('i').classList.contains('bx-merge'))
-        //     mode = modes[0]
-        // else if (evt.target.querySelector('i').classList.contains('bx-intersect'))
-        //     mode = modes[1]
-        // else if (evt.target.querySelector('i').classList.contains('bx-minus-front'))
-        //     mode = modes[2]
-
-        console.log('hima')
+        console.log(evt.target.id)
+        if (evt.target.id === 'disable1') {
+            uniCanvas1 = !uniCanvas1;
+            if (uniCanvas1) {
+                drawDisableImage(0);
+            }
+            else {
+                deleteDisableImage(0);
+            }
+        }
+        else if (evt.target.id === 'disable2') {
+            uniCanvas2 = !uniCanvas2;
+            if (uniCanvas2) {
+                drawDisableImage(2);
+            }
+            else {
+                deleteDisableImage(2);
+            }
+        }
     }
 })
+
+
+const drawDisableImage = (layerNumber) => {
+    let newImage = new Image()
+    newImage.src = '../static/images/disable.png'
+    let img = drawImage(newImage)
+    layers[layerNumber].add(img)
+}
+
+const deleteDisableImage = (layerNumber) => {
+    let layerImages = layers[layerNumber].find('Image')
+    layerImages[1].remove()
+}
