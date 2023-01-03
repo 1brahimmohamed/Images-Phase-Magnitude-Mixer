@@ -5,6 +5,8 @@ import json
 from .image import ImageMain
 import numpy as np
 import matplotlib.pyplot as plt
+from PIL import Image
+import imageio
 
 pictures = [None, None]
 
@@ -41,18 +43,22 @@ def generate_result(request):
         canvas_one_shapes = req['canvasOneShapes']
         canvas_two_shapes = req['canvasTwoShapes']
 
-        phase = None
-        magnitude = None
+        magnitude, phase = extract_magnitude_phase(
+            canvas_one_state,
+            canvas_two_state,
+            canvas_one_shapes,
+            canvas_two_shapes,
+            mode
+        )
 
-        mix1 = pictures[0].crop_img('magnitude', canvas_one_shapes, mode)
-        mix2 = pictures[1].crop_img('phase', canvas_two_shapes, mode)
-        result_arr = np.real(np.fft.ifft2(np.multiply(mix1, np.exp(1j * mix2))))
+        result_arr = np.real(np.fft.ifft2(np.multiply(magnitude, np.exp(1j * phase))))
+        result_arr = np.where((255 - result_arr) < 100, 255, result_arr + 20)
 
         # save image
         px = 1 / plt.rcParams['figure.dpi']
         fig = plt.figure(figsize=(1325 * px, 1325 * px))
         ax = plt.subplot(111)
-        ax.imshow(np.abs(np.abs(result_arr)), cmap='gray')
+        ax.imshow(np.abs(result_arr), cmap='gray')
         ax.axis('off')
         fig.savefig('phasemixer/static/images/result.jpg', bbox_inches='tight', pad_inches=0)
 
@@ -89,3 +95,39 @@ def upload(request):
                 'Status': "Saved Successfully",
             }
         )
+
+
+def extract_magnitude_phase(c1_state, c2_state, c1_shapes, c2_shapes, mode):
+    magnitude = None
+    phase = None
+
+    if not c1_state == 'disabled' and not c2_shapes == 'disabled':
+        if c1_state == 'phase':
+            phase = pictures[0].crop_img('phase', c1_shapes, mode)
+            magnitude = pictures[1].crop_img('magnitude', c2_shapes, mode)
+
+        elif c1_state == 'magnitude':
+            magnitude = pictures[0].crop_img('magnitude', c1_shapes, mode)
+            phase = pictures[1].crop_img('phase', c2_shapes, mode)
+
+    if c1_state == 'disabled':
+        if c2_state == 'magnitude':
+            magnitude = pictures[1].crop_img('magnitude', c2_shapes, mode)
+            phase = np.ones(magnitude.shape)
+        else:
+            phase = pictures[1].crop_img('phase', c2_shapes, mode)
+            magnitude = np.ones(phase.shape)
+
+    if c2_state == 'disabled':
+        if c1_state == 'magnitude':
+            magnitude = pictures[0].crop_img('magnitude', c1_shapes, mode)
+            phase = np.ones(magnitude.shape)
+        else:
+            phase = pictures[0].crop_img('phase', c1_shapes, mode)
+            magnitude = np.ones(phase.shape)
+
+    if c1_state == 'disabled' and c2_state == 'disabled':
+        magnitude = np.ones((1000, 1000))
+        phase = np.ones((1000, 1000))
+
+    return magnitude, phase
