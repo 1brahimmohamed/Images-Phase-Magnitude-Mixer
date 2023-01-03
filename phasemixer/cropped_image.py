@@ -34,5 +34,3 @@ class CroppedImage(ImageMain):
     @property
     def arr_post(self):
         return self.__arr_post
-
-
