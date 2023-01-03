@@ -148,6 +148,8 @@ document.addEventListener("change", (evt)=>{
             console.log(canvas1Status, canvas2Status)
 
         }
+
+        sendRequest()
     }
 })
 

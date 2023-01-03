@@ -6,7 +6,7 @@ from .image import ImageMain
 import numpy as np
 import matplotlib.pyplot as plt
 
-pictures = [1, 2]
+pictures = [None, None]
 
 
 @csrf_protect
@@ -41,17 +41,25 @@ def generate_result(request):
         canvas_one_shapes = req['canvasOneShapes']
         canvas_two_shapes = req['canvasTwoShapes']
 
+        phase = None
+        magnitude = None
 
-        mix1 = pictures[0].crop_img('magnitude', canvas_one_shapes, mode)
-        mix2 = pictures[1].crop_img('phase', canvas_two_shapes, mode)
-        result_arr = np.real(np.fft.ifft2(np.multiply(mix1, np.exp(1j * mix2))))
+        if not canvas_one_state == 'disabled' and not canvas_two_state == 'disabled':
+            if canvas_one_state == 'phase':
+                phase = pictures[0].crop_img('phase', canvas_one_shapes, mode)
+                magnitude = pictures[1].crop_img('magnitude', canvas_two_shapes, mode)
+
+            elif canvas_one_state == 'magnitude':
+                magnitude = pictures[0].crop_img('magnitude', canvas_one_shapes, mode)
+                phase = pictures[1].crop_img('phase', canvas_two_shapes, mode)
+
+        result_arr = np.real(np.fft.ifft2(np.multiply(magnitude, np.exp(1j * phase))))
         plt.imsave('phasemixer/static/images/result.jpg', np.abs(result_arr), cmap='gray')
+
 
         return JsonResponse(
             {
-                # "pictureOneURL": pictures[0].img_url,
-                # "pictureTwoURL": pictures[1].img_url,
-                'llol': ''
+                'Status': "Saved Successfully",
             }
         )
 
