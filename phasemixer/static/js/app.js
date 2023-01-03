@@ -366,10 +366,23 @@ const sendRequest = __ => {
             )
         }).then(response => {
             let image = new Image();
-            image.src = 'https://picsum.photos/500';
+            image.src = '../static/images/result.jpg';
             let img = drawImage(image);
-            console.log(img)
             layers[4].add(img);
+
+            console.log(response)
         })
+
+    // let form = new FormData();
+    // form.append('mode', mode);
+    // form.append('canvasOneState', canvas1Status);
+    // form.append('canvasTwoState', canvas2Status);
+    // form.append('canvasOneShapes', JSON.stringify(shapesCanvas1));
+    // form.append('canvasTwoShapes', JSON.stringify(shapesCanvas2));
+    //
+    // axios.post('http://127.0.0.1:7000/phasemixer/test', form).then(response => {
+    //     console.log(response)
+    // })
+
     // }
 }

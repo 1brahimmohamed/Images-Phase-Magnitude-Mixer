@@ -3,7 +3,11 @@ from django.http import HttpResponse, JsonResponse
 from django.views.decorators.csrf import csrf_exempt, csrf_protect
 import json
 from .image import ImageMain
-from .cropped_image import CroppedImage
+import numpy as np
+import matplotlib.pyplot as plt
+
+pictures = [1, 2]
+
 
 @csrf_protect
 @csrf_exempt
@@ -38,10 +42,16 @@ def generate_result(request):
         canvas_two_shapes = req['canvasTwoShapes']
 
 
+        mix1 = pictures[0].crop_img('magnitude', canvas_one_shapes, mode)
+        mix2 = pictures[1].crop_img('phase', canvas_two_shapes, mode)
+        result_arr = np.real(np.fft.ifft2(np.multiply(mix1, np.exp(1j * mix2))))
+        plt.imsave('phasemixer/static/images/result.jpg', np.abs(result_arr), cmap='gray')
 
         return JsonResponse(
             {
-                'Status': "Saved Successfully",
+                # "pictureOneURL": pictures[0].img_url,
+                # "pictureTwoURL": pictures[1].img_url,
+                'llol': ''
             }
         )
 
@@ -50,17 +60,22 @@ def generate_result(request):
 @csrf_exempt
 def upload(request):
     if request.method == 'POST':
+        global picture_1
+        global picture_2
 
         file = request.FILES['file']
         location = request.POST['location']
 
-        ImageMain(
+        img = ImageMain(
             file,
             f'{location}.jpg',
             ('mag1.jpg' if location == 'image1' else 'mag2.jpg'),
             ('phase1.jpg' if location == 'image2' else 'phase2.jpg'))
 
-        # img1 = CroppedImage()
+        if location == 'image1':
+            pictures[0] = img
+        else:
+            pictures[1] = img
 
         return JsonResponse(
             {
