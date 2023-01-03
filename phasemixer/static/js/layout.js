@@ -54,25 +54,37 @@ document.addEventListener('click', (evt) => {
 
 document.addEventListener('click', (evt) => {
     if (evt.target.matches('.disable')){
-        console.log(evt.target.id)
         if (evt.target.id === 'disable1') {
             uniCanvas1 = !uniCanvas1;
             if (uniCanvas1) {
                 drawDisableImage(0);
+                canvas1Status = canvasStatus[2];
             }
             else {
                 deleteDisableImage(0);
+
+                if (check1.checked)
+                    canvas1Status = canvasStatus[0];
+                else
+                    canvas1Status = canvasStatus[1];
             }
         }
         else if (evt.target.id === 'disable2') {
             uniCanvas2 = !uniCanvas2;
             if (uniCanvas2) {
                 drawDisableImage(2);
+                canvas2Status = canvasStatus[2];
             }
             else {
                 deleteDisableImage(2);
+
+                if (check2.checked)
+                    canvas2Status = canvasStatus[1];
+                else
+                    canvas2Status = canvasStatus[0];
             }
         }
+        console.log(canvas1Status, canvas2Status)
     }
 })
 

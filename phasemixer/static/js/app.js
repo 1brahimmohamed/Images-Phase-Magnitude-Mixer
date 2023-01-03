@@ -17,10 +17,13 @@ let wantToDraw = true;                          // boolean to enable/disable dra
 
 const index = 1;
 
-let modes = ['all', 'intersect', 'difference'],             // modes of operation
-    phases = ['false','uni-phase', 'uni-mag'];              // phase mixing modes
+let modes = ['or', 'and', 'xor'],                                               // modes of operation
+    canvasStatus = ['phase','magnitude', 'disable'];              // phase mixing modes
 
-let mode = modes[0];                // default mode is all
+let mode = modes[0],                            // default mode is all
+    canvas1Status = canvasStatus[1],              // default mode is magnitude
+    canvas2Status = canvasStatus[0];              // default mode is phase
+
 
 // Construct 6 Konva stages on each div
 for (let i = 1; i < 6; i++) {
@@ -355,7 +358,8 @@ const sendRequest = __ => {
             dataType: 'json',
             body: JSON.stringify({
                     mode: mode,
-                    phase: check1.checked ? 'Canvas1': 'Canvas2',
+                    canvasOneState: canvas1Status,
+                    canvasTwoState: canvas2Status,
                     canvasOneShapes: shapesCanvas1,
                     canvasTwoShapes: shapesCanvas2,
                 }

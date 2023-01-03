@@ -10,6 +10,14 @@ let imageOriginalOne = new Image(),
 let check1 = document.getElementById('check1'),
     check2 = document.getElementById('check2');
 
+
+let image1Path = '../static/images/image1.jpg',
+    image2Path = '../static/images/image2.jpg',
+    imageMag1Path = '../static/images/mag1.jpg',
+    imageMag2Path = '../static/images/mag2.jpg',
+    image1PhasePath = '../static/images/phase1.jpg',
+    image2PhasePath = '../static/images/phase2.jpg';
+
 // upload handling
 document.addEventListener('input', (evt) => {
 
@@ -36,8 +44,8 @@ document.addEventListener('input', (evt) => {
                 // if the image is the first image toggle the first canvas
                 // else toggle the second canvas
                 if (evt.target.id === 'selectedFile') {
-                    imageOriginalOne.src = '../static/images/image1.png';
-                    imageMagOne.src = '../static/images/mag1.png';
+                    imageOriginalOne.src = image1Path;
+                    imageMagOne.src = imageMag1Path;
                     selectedImage = imageOriginalOne;
                     magImage = imageMagOne;
                     originalPos = 0;
@@ -52,8 +60,8 @@ document.addEventListener('input', (evt) => {
                     layers[magPos].add(imgMag1);
 
                 } else {
-                    imageOriginalTwo.src = '../static/images/image2.png';
-                    imageMagTwo.src = '../static/images/phase2.png';
+                    imageOriginalTwo.src = image2Path;
+                    imageMagTwo.src = image2PhasePath;
                     selectedImage = imageOriginalTwo;
                     magImage = imageMagTwo;
                     originalPos = 2;
@@ -87,45 +95,58 @@ document.addEventListener("change", (evt)=>{
 
 
             if (evt.target.id === 'check1'){
-                newImage1.src = '../static/images/phase1.png'
-                newImage2.src = '../static/images/mag2.png'
+                newImage1.src = image1PhasePath
+                newImage2.src = imageMag2Path
                 imgMag1.image(newImage1)
                 imgMag2.image(newImage2)
                 canvasPreviewMode1 = false
                 check2.checked = true
-                console.log(check1.checked, check2.checked)
 
             } else {
-                newImage1.src = '../static/images/phase1.png'
-                newImage2.src = '../static/images/mag2.png'
+                newImage1.src = image1PhasePath
+                newImage2.src = imageMag2Path
                 imgMag1.image(newImage1)
                 imgMag2.image(newImage2)
                 canvasPreviewMode2 = false
                 check1.checked = true
-                console.log(check1.checked, check2.checked)
-
 
             }
+
+            if (canvas1Status !== canvasStatus[2])
+                canvas1Status = canvasStatus[0];
+            if (canvas2Status !== canvasStatus[2])
+                canvas2Status = canvasStatus[1];
+
+
+            console.log(canvas1Status, canvas2Status)
         }
         else if (!evt.target.checked) {
             let newImage1 = new Image(),
                 newImage2 = new Image();
 
             if (evt.target.id === 'check1'){
-                newImage1.src = '../static/images/mag1.png'
-                newImage2.src = '../static/images/phase2.png'
+                newImage1.src = imageMag1Path
+                newImage2.src = image2PhasePath
                 imgMag1.image(newImage1)
                 imgMag2.image(newImage2)
                 canvasPreviewMode1 = true
                 check2.checked = false
             } else {
-                newImage1.src = '../static/images/mag1.png'
-                newImage2.src = '../static/images/phase2.png'
+                newImage1.src = imageMag1Path
+                newImage2.src = image2PhasePath
                 imgMag1.image(newImage1)
                 imgMag2.image(newImage2)
                 canvasPreviewMode2 = true
                 check1.checked = false
             }
+
+            if (canvas1Status !== canvasStatus[2])
+                canvas1Status = canvasStatus[1];
+            if (canvas2Status !== canvasStatus[2])
+                canvas2Status = canvasStatus[0];
+
+            console.log(canvas1Status, canvas2Status)
+
         }
     }
 })
