@@ -10,8 +10,6 @@ let originalImageOne = document.getElementById('konva-container-1'),       // ge
     drawingDivWidth = originalImageOne.offsetWidth,             // canvas width
     drawingDivHeight = originalImageOne.offsetHeight;           // canvas height
 
-
-
 let currentStage = 1,                           // current stage I am drawing onto
     operatingShapes;                            // variable to hold array of target array of shapes
 
@@ -27,7 +25,6 @@ let mode = modes[0],                            // default mode is all
     canvas2Status = canvasStatus[0];              // default mode is phase
 
 
-console.log(drawingDivWidth, drawingDivHeight)
 
 // Construct 6 Konva stages on each div
 for (let i = 1; i < 6; i++) {
@@ -46,12 +43,15 @@ for (let i = 0; i < 5; i++) {
     stages[i].add(layer);                       // add each layer to its corresponding stage
 }
 
+let target = null;
+
 /**
  * Function which is executed when the user clicks on the canvas
  * @param event
  * @returns __
  **/
 const mouseDownHandler = (event) => {
+
 
     // first we need detect which canvas we are attempting to use
     currentStage = detectCanvas(event);
@@ -120,7 +120,7 @@ const mouseUpHandler = (event) => {
 
     // if I move the shape then do nothing but enable drawing again
     if (!wantToDraw) {
-        sendRequest(shapesCanvas1, shapesCanvas2, mode);
+        sendRequest();
         wantToDraw = true;
         return;
     }
@@ -166,12 +166,10 @@ const mouseUpHandler = (event) => {
             return newPos;
         },
     });
-
     layers[currentStage].add(tr);
 
-    sendRequest(shapesCanvas1, shapesCanvas2, mode);
+    sendRequest();
 }
-
 /**
  * Add Event Listeners to both drawing canvases
  * index = 1 -> stage 1 (second stage)
@@ -200,15 +198,13 @@ stages[index + 2].on('mouseup', mouseUpHandler)
 const checkDraw = (x_current, y_current) => {
     // check if the mouse position is on one of our drawn shapes
     for (let i = 0; i < operatingShapes.length; i++) {
-
-        console.log(shapesCanvas1)
+        let offset = 5
 
         if (operatingShapes[i].className === 'Rect') {
-            console.log('ana hena 2')
-            if (operatingShapes[i].x() <= x_current &&
-                operatingShapes[i].x() + operatingShapes[i].width() > x_current &&
-                operatingShapes[i].y() <= y_current &&
-                operatingShapes[i].y() + operatingShapes[i].height() > y_current) {
+            if (operatingShapes[i].x() - offset <= x_current &&
+                operatingShapes[i].x() + operatingShapes[i].width() + offset > x_current &&
+                operatingShapes[i].y() - offset <= y_current &&
+                operatingShapes[i].y() + operatingShapes[i].height() + offset> y_current) {
 
                 return false;                 // then I want to move the shape not to draw
             }
@@ -220,10 +216,10 @@ const checkDraw = (x_current, y_current) => {
                 xCenter = operatingShapes[i].x(),
                 yCenter = operatingShapes[i].y();
 
-            if (x_current >= xCenter - rx &&
-                x_current < xCenter + rx &&
-                y_current >= yCenter - ry &&
-                y_current < yCenter + ry) {
+            if (x_current >= xCenter - rx - offset &&
+                x_current < xCenter + rx + offset &&
+                y_current >= yCenter - ry - offset &&
+                y_current < yCenter + ry + offset) {
 
                 return false;
             }
@@ -245,11 +241,12 @@ const checkDraw = (x_current, y_current) => {
 const detectCanvas = (event) => {
     try {
         let id = event.target.parent._id;
-
         if (id === 7)
             return 1;
         else if (id === 9)
             return 3;
+        else
+            return 1;
     } catch (e) {
         if (event.target._id === 2)
             return 1;
@@ -351,7 +348,36 @@ const drawImage = (
  * Function to send the request to the server
  * @returns {Promise<void>}
  */
-const sendRequest = __ => {
+const sendRequest = () => {
+
+    let shapes1 = [],
+        shapes2 = [];
+
+    for (let i = 0; i < shapesCanvas1.length; i++) {
+        let disShapes = {
+            'attrs': {
+                x : shapesCanvas1[i].x(),
+                y : shapesCanvas1[i].y(),
+                width : shapesCanvas1[i].width() * shapesCanvas1[i].scaleX(),
+                height : shapesCanvas1[i].height() * shapesCanvas1[i].scaleY()
+            },
+            'className' : 'Rect'
+        };
+        shapes1.push(disShapes);
+    }
+
+    for (let j = 0; j < shapesCanvas2.length; j++) {
+        let disShapes = {
+            'attrs': {
+                x: shapesCanvas2[j].x(),
+                y: shapesCanvas2[j].y(),
+                width: shapesCanvas2[j].width() * shapesCanvas2[j].scaleX(),
+                height: shapesCanvas2[j].height() * shapesCanvas2[j].scaleY()
+            },
+            'className': 'Rect'
+        }
+        shapes2.push(disShapes);
+    }
 
     // if ((canvasPreviewMode1 && !canvasPreviewMode2) || (!canvasPreviewMode1 && canvasPreviewMode2)) {
         fetch('http://127.0.0.1:7000/phasemixer/test', {
@@ -364,8 +390,8 @@ const sendRequest = __ => {
                     mode: mode,
                     canvasOneState: canvas1Status,
                     canvasTwoState: canvas2Status,
-                    canvasOneShapes: shapesCanvas1,
-                    canvasTwoShapes: shapesCanvas2,
+                    canvasOneShapes: shapes1,
+                    canvasTwoShapes: shapes2,
                 }
             )
         }).then(response => {
@@ -373,8 +399,6 @@ const sendRequest = __ => {
             image.src = '../static/images/result.jpg';
             let img = drawImage(image);
             layers[4].add(img);
-
-            console.log(response)
         })
 
     // let form = new FormData();

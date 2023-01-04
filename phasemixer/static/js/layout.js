@@ -84,7 +84,7 @@ document.addEventListener('click', (evt) => {
                     canvas2Status = canvasStatus[0];
             }
         }
-        console.log(canvas1Status, canvas2Status)
+        sendRequest()
     }
 })
 

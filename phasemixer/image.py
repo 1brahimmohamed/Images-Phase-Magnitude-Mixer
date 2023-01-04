@@ -4,7 +4,7 @@ from matplotlib import pyplot as plt
 import json
 
 class ImageMain:
-    Image_Size = (400, 400)
+    Image_Size = (404, 404)
     Path_Img = "phasemixer\\static\\images\\"
 
     def __init__(self, file, img_name: str, img_amp_name: str, img_phase_name: str):
@@ -68,7 +68,7 @@ class ImageMain:
         arr_cropped = np.zeros(img_copy.size)
 
         for shape in shapes:
-            shape = json.loads(shape)
+            # shape = json.loads(shape)
 
             print(shape)
 
@@ -80,7 +80,7 @@ class ImageMain:
                 img_draw.ellipse(((shape['attrs']['x'] - shape['attrs']['radiusX']), (shape['attrs']['y'] - shape['attrs']['radiusY']),
                                   (shape['attrs']['x'] + shape['attrs']['radiusX']), (shape['attrs']['y'] + shape['attrs']['radiusY'])), fill=1)
             else:
-                img_draw.rounded_rectangle((shape['attrs']['x'], shape['attrs']['y'], shape['attrs']['width'], shape['attrs']['height']), 0, fill=1)
+                img_draw.rounded_rectangle((shape['attrs']['x'], shape['attrs']['y'], shape['attrs']['x'] + shape['attrs']['width'], shape['attrs']['y'] + shape['attrs']['height']), 0, fill=1)
             img_copy.putalpha(img_mask)
 
             if mode == 'and':

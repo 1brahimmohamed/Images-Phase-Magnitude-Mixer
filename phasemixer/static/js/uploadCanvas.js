@@ -149,7 +149,7 @@ document.addEventListener("change", (evt)=>{
 
         }
 
-        sendRequest()
+        sendRequest(undefined, shapesCanvas2, mode)
     }
 })
 

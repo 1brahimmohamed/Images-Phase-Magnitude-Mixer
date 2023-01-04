@@ -58,6 +58,7 @@ def generate_result(request):
 
         # save image
         plt.imsave('phasemixer/static/images/result.jpg', np.abs(result_arr), cmap='gray')
+        print('-' * 200)
 
         # increase brightness of image
         # result_img = Image.open("phasemixer/static/images/result.jpg").convert('L')
@@ -105,8 +106,8 @@ def upload(request):
 def extract_magnitude_phase(c1_state, c2_state, c1_shapes, c2_shapes, mode):
     magnitude = None
     phase = None
-
-    if not c1_state == 'disabled' and not c2_shapes == 'disabled':
+    print(c1_state, c2_state)
+    if not c1_state == 'disable' and not c2_shapes == 'disable':
         if c1_state == 'phase':
             phase = pictures[0].crop_img('phase', c1_shapes, mode)
             magnitude = pictures[1].crop_img('magnitude', c2_shapes, mode)
@@ -115,15 +116,16 @@ def extract_magnitude_phase(c1_state, c2_state, c1_shapes, c2_shapes, mode):
             magnitude = pictures[0].crop_img('magnitude', c1_shapes, mode)
             phase = pictures[1].crop_img('phase', c2_shapes, mode)
 
-    if c1_state == 'disabled':
+    if c1_state == 'disable':
         if c2_state == 'magnitude':
             magnitude = pictures[1].crop_img('magnitude', c2_shapes, mode)
             phase = np.ones(magnitude.shape)
         else:
             phase = pictures[1].crop_img('phase', c2_shapes, mode)
+            print('ana hena',  phase.shape)
             magnitude = np.ones(phase.shape)
 
-    if c2_state == 'disabled':
+    if c2_state == 'disable':
         if c1_state == 'magnitude':
             magnitude = pictures[0].crop_img('magnitude', c1_shapes, mode)
             phase = np.ones(magnitude.shape)
@@ -131,8 +133,8 @@ def extract_magnitude_phase(c1_state, c2_state, c1_shapes, c2_shapes, mode):
             phase = pictures[0].crop_img('phase', c1_shapes, mode)
             magnitude = np.ones(phase.shape)
 
-    if c1_state == 'disabled' and c2_state == 'disabled':
-        magnitude = np.ones((1000, 1000))
-        phase = np.ones((1000, 1000))
+    if c1_state == 'disable' and c2_state == 'disable':
+        magnitude = np.ones((404, 404))
+        phase = np.ones((404, 404))
 
     return magnitude, phase
