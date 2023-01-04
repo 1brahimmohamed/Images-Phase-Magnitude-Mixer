@@ -18,12 +18,11 @@ let wantToDraw = true;                          // boolean to enable/disable dra
 const index = 1;
 
 let modes = ['or', 'and', 'xor'],                                               // modes of operation
-    canvasStatus = ['phase','magnitude', 'disable'];              // phase mixing modes
+    canvasStatus = ['phase', 'magnitude', 'disable'];              // phase mixing modes
 
 let mode = modes[0],                            // default mode is all
     canvas1Status = canvasStatus[1],              // default mode is magnitude
     canvas2Status = canvasStatus[0];              // default mode is phase
-
 
 
 // Construct 6 Konva stages on each div
@@ -126,14 +125,12 @@ const mouseUpHandler = (event) => {
     }
 
     // to normalize the inputs if the user draw it backward
-    if (objDraw.width() < 0 && objDraw.height() < 0){
-
+    if (objDraw.width() < 0 && objDraw.height() < 0) {
         objDraw.x(objDraw.x() + objDraw.width())
         objDraw.y(objDraw.y() + objDraw.height())
         objDraw.width(Math.abs(objDraw.width()))
         objDraw.height(Math.abs(objDraw.height()))
-    }
-    else if (objDraw.width() < 0){
+    } else if (objDraw.width() < 0) {
         objDraw.x(objDraw.x() + objDraw.width())
         objDraw.width(Math.abs(objDraw.width()))
     }
@@ -204,12 +201,11 @@ const checkDraw = (x_current, y_current) => {
             if (operatingShapes[i].x() - offset <= x_current &&
                 operatingShapes[i].x() + operatingShapes[i].width() + offset > x_current &&
                 operatingShapes[i].y() - offset <= y_current &&
-                operatingShapes[i].y() + operatingShapes[i].height() + offset> y_current) {
+                operatingShapes[i].y() + operatingShapes[i].height() + offset > y_current) {
 
                 return false;                 // then I want to move the shape not to draw
             }
-        }
-        else if (operatingShapes[i].className === 'Ellipse') {
+        } else if (operatingShapes[i].className === 'Ellipse') {
 
             let rx = operatingShapes[i].radiusX(),
                 ry = operatingShapes[i].radiusY(),
@@ -343,6 +339,45 @@ const drawImage = (
     });
 }
 
+/**
+ * Function to set up shapes objects
+ * @param shapesArray
+ * returns {Array} shapes
+ **/
+const setUpRequestData = (shapesArray) => {
+
+    let shapes = [],
+        disShapes = null;
+
+    for (let i = 0; i < shapesArray.length; i++) {
+
+        if (shapesArray[i].className === 'Rect') {
+            disShapes = {
+                'attrs': {
+                    x: shapesArray[i].x(),
+                    y: shapesArray[i].y(),
+                    width: shapesArray[i].width() * shapesArray[i].scaleX(),
+                    height: shapesArray[i].height() * shapesArray[i].scaleY()
+                },
+                'className': 'Rect'
+            }
+        } else {
+            disShapes = {
+                'attrs': {
+                    x: shapesArray[i].x(),
+                    y: shapesArray[i].y(),
+                    radiusX: shapesArray[i].radiusX() * shapesArray[i].scaleX(),
+                    radiusY: shapesArray[i].radiusY() * shapesArray[i].scaleY()
+                },
+                'className': 'Ellipse'
+            }
+        }
+
+        shapes.push(disShapes);
+    }
+
+    return shapes;
+}
 
 /**
  * Function to send the request to the server
@@ -350,67 +385,29 @@ const drawImage = (
  */
 const sendRequest = () => {
 
-    let shapes1 = [],
-        shapes2 = [];
-
-    for (let i = 0; i < shapesCanvas1.length; i++) {
-        let disShapes = {
-            'attrs': {
-                x : shapesCanvas1[i].x(),
-                y : shapesCanvas1[i].y(),
-                width : shapesCanvas1[i].width() * shapesCanvas1[i].scaleX(),
-                height : shapesCanvas1[i].height() * shapesCanvas1[i].scaleY()
-            },
-            'className' : 'Rect'
-        };
-        shapes1.push(disShapes);
-    }
-
-    for (let j = 0; j < shapesCanvas2.length; j++) {
-        let disShapes = {
-            'attrs': {
-                x: shapesCanvas2[j].x(),
-                y: shapesCanvas2[j].y(),
-                width: shapesCanvas2[j].width() * shapesCanvas2[j].scaleX(),
-                height: shapesCanvas2[j].height() * shapesCanvas2[j].scaleY()
-            },
-            'className': 'Rect'
-        }
-        shapes2.push(disShapes);
-    }
+    let shapes1 = setUpRequestData(shapesCanvas1),
+        shapes2 = setUpRequestData(shapesCanvas2);
 
     // if ((canvasPreviewMode1 && !canvasPreviewMode2) || (!canvasPreviewMode1 && canvasPreviewMode2)) {
-        fetch('http://127.0.0.1:7000/phasemixer/test', {
-            method: 'POST',
-            headers: {
-                "Content-Type": "application/json"
-            },
-            dataType: 'json',
-            body: JSON.stringify({
-                    mode: mode,
-                    canvasOneState: canvas1Status,
-                    canvasTwoState: canvas2Status,
-                    canvasOneShapes: shapes1,
-                    canvasTwoShapes: shapes2,
-                }
-            )
-        }).then(response => {
-            let image = new Image();
-            image.src = '../static/images/result.jpg';
-            let img = drawImage(image);
-            layers[4].add(img);
-        })
-
-    // let form = new FormData();
-    // form.append('mode', mode);
-    // form.append('canvasOneState', canvas1Status);
-    // form.append('canvasTwoState', canvas2Status);
-    // form.append('canvasOneShapes', JSON.stringify(shapesCanvas1));
-    // form.append('canvasTwoShapes', JSON.stringify(shapesCanvas2));
-    //
-    // axios.post('http://127.0.0.1:7000/phasemixer/test', form).then(response => {
-    //     console.log(response)
-    // })
-
-    // }
+    fetch('http://127.0.0.1:7000/phasemixer/test', {
+        method: 'POST',
+        headers: {
+            "Content-Type": "application/json"
+        },
+        dataType: 'json',
+        body: JSON.stringify({
+                mode: mode,
+                canvasOneState: canvas1Status,
+                canvasTwoState: canvas2Status,
+                canvasOneShapes: shapes1,
+                canvasTwoShapes: shapes2,
+            }
+        )
+    }).then(response => {
+        let image = new Image();
+        image.src = '../static/images/result.jpg';
+        let img = drawImage(image);
+        layers[4].add(img);
+    })
 }
+
