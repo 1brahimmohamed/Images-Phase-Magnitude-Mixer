@@ -5,8 +5,7 @@ import json
 from .image import ImageMain
 import numpy as np
 import matplotlib.pyplot as plt
-from PIL import Image
-import imageio
+from PIL import Image, ImageEnhance
 
 pictures = [None, None]
 
@@ -55,12 +54,14 @@ def generate_result(request):
         result_arr = np.where((255 - result_arr) < 100, 255, result_arr + 20)
 
         # save image
-        px = 1 / plt.rcParams['figure.dpi']
-        fig = plt.figure(figsize=(1325 * px, 1325 * px))
-        ax = plt.subplot(111)
-        ax.imshow(np.abs(result_arr), cmap='gray')
-        ax.axis('off')
-        fig.savefig('phasemixer/static/images/result.jpg', bbox_inches='tight', pad_inches=0)
+        plt.imsave('phasemixer/static/images/result.jpg', np.abs(result_arr))
+
+        # increase brightness of image
+        result_img = Image.open("phasemixer/static/images/result.jpg")
+        enhancer = ImageEnhance.Brightness(result_img)
+        factor = 1.5  # brightens the image
+        result_img = enhancer.enhance(factor)
+        result_img.save('phasemixer/static/images/result.jpg')
 
         return JsonResponse(
             {
@@ -79,6 +80,7 @@ def upload(request):
         file = request.FILES['file']
         location = request.POST['location']
 
+        print(file)
         img = ImageMain(
             file,
             f'{location}.jpg',
