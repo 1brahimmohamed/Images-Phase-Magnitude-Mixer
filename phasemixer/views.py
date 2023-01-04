@@ -45,7 +45,14 @@ def generate_result(request):
         mix1 = pictures[0].crop_img('magnitude', canvas_one_shapes, mode)
         mix2 = pictures[1].crop_img('phase', canvas_two_shapes, mode)
         result_arr = np.real(np.fft.ifft2(np.multiply(mix1, np.exp(1j * mix2))))
-        plt.imsave('phasemixer/static/images/result.jpg', np.abs(result_arr), cmap='gray')
+
+        # save image
+        px = 1 / plt.rcParams['figure.dpi']
+        fig = plt.figure(figsize=(1325 * px, 1325 * px))
+        ax = plt.subplot(111)
+        ax.imshow(np.abs(np.abs(result_arr)), cmap='gray')
+        ax.axis('off')
+        fig.savefig('phasemixer/static/images/result.jpg', bbox_inches='tight', pad_inches=0)
 
         return JsonResponse(
             {
