@@ -10,6 +10,8 @@ let originalImageOne = document.getElementById('konva-container-1'),       // ge
     drawingDivWidth = originalImageOne.offsetWidth,             // canvas width
     drawingDivHeight = originalImageOne.offsetHeight;           // canvas height
 
+
+
 let currentStage = 1,                           // current stage I am drawing onto
     operatingShapes;                            // variable to hold array of target array of shapes
 
@@ -24,6 +26,8 @@ let mode = modes[0],                            // default mode is all
     canvas1Status = canvasStatus[1],              // default mode is magnitude
     canvas2Status = canvasStatus[0];              // default mode is phase
 
+
+console.log(drawingDivWidth, drawingDivHeight)
 
 // Construct 6 Konva stages on each div
 for (let i = 1; i < 6; i++) {

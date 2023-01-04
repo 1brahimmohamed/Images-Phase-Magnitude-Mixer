@@ -50,18 +50,21 @@ def generate_result(request):
             mode
         )
 
+        plt.imsave('phasemixer/static/images/magnitude.png', (np.log(np.abs(magnitude+0.01))), cmap='gray')
+        plt.imsave('phasemixer/static/images/phaseeee.png', phase, cmap='gray')
+
         result_arr = np.real(np.fft.ifft2(np.multiply(magnitude, np.exp(1j * phase))))
-        result_arr = np.where((255 - result_arr) < 100, 255, result_arr + 20)
+        # result_arr = np.where((255 - result_arr) < 100, 255, result_arr + 20)
 
         # save image
-        plt.imsave('phasemixer/static/images/result.jpg', np.abs(result_arr))
+        plt.imsave('phasemixer/static/images/result.jpg', np.abs(result_arr), cmap='gray')
 
         # increase brightness of image
-        result_img = Image.open("phasemixer/static/images/result.jpg")
-        enhancer = ImageEnhance.Brightness(result_img)
-        factor = 1.5  # brightens the image
-        result_img = enhancer.enhance(factor)
-        result_img.save('phasemixer/static/images/result.jpg')
+        # result_img = Image.open("phasemixer/static/images/result.jpg").convert('L')
+        # enhancer = ImageEnhance.Brightness(result_img)
+        # factor = 1.5  # brightens the image
+        # result_img = enhancer.enhance(factor)
+        # result_img.save('phasemixer/static/images/result.jpg', mode='L')
 
         return JsonResponse(
             {

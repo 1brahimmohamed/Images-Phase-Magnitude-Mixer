@@ -135,6 +135,8 @@ p{
   justify-content: center;
   flex-direction: column;
   align-items: center;
+  height: 450px;
+  width: 450px;
   background: rgb(254,254,250, 0.5);
   box-shadow: rgba(99, 99, 99, 0.2) 0 2px 8px 0;
 }

@@ -4,7 +4,7 @@ from matplotlib import pyplot as plt
 import json
 
 class ImageMain:
-    Image_Size = (1000, 1000)
+    Image_Size = (400, 400)
     Path_Img = "phasemixer\\static\\images\\"
 
     def __init__(self, file, img_name: str, img_amp_name: str, img_phase_name: str):
@@ -59,9 +59,9 @@ class ImageMain:
             arr = self.__arr_phase
             img = self.__img_phase
 
-
-
         img_copy = img.copy()
+        arr = arr.copy()
+
         arr_zeros = np.zeros(img_copy.size)
         arr_ones = np.ones(img_copy.size)
         i = 0
@@ -69,6 +69,8 @@ class ImageMain:
 
         for shape in shapes:
             shape = json.loads(shape)
+
+            print(shape)
 
             img_mask = Image.new("L", img_copy.size)
             img_draw = ImageDraw.Draw(img_mask)
