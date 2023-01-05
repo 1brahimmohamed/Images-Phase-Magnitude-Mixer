@@ -42,7 +42,7 @@ let currentStage = 1,
 
 
 function main() {
-    // Construct 6 Konva stages on each div
+    // Construct 5 Konva stages on each div
     for (let i = 1; i < 6; i++) {
         const Stage = new Konva.Stage({
             height: drawingDivHeight,
@@ -52,7 +52,7 @@ function main() {
         stages.push(Stage)
     }
 
-    // Construct 6 Konva layers on each stage
+    // Construct 5 Konva layers on each stage
     for (let i = 0; i < 5; i++) {
         const layer = new Konva.Layer();
         layers.push(layer);
