@@ -118,7 +118,6 @@ document.addEventListener("change", (evt)=>{
                 canvas2Status = canvasStatus[1];
 
 
-            console.log(canvas1Status, canvas2Status)
         }
         else if (!evt.target.checked) {
             let newImage1 = new Image(),
@@ -145,10 +144,8 @@ document.addEventListener("change", (evt)=>{
             if (canvas2Status !== canvasStatus[2])
                 canvas2Status = canvasStatus[0];
 
-            console.log(canvas1Status, canvas2Status)
 
         }
-
         sendRequest(undefined, shapesCanvas2, mode)
     }
 })

@@ -55,7 +55,6 @@
     tr.nodes([rect]);
 
     rect.on('transformstart', function () {
-        console.log('transform start');
     });
 
     rect.on('dragmove', function () {
@@ -63,11 +62,9 @@
     });
     rect.on('transform', function () {
         updateText();
-        console.log('transform');
     });
 
     rect.on('transformend', function () {
-        console.log('transform end');
     });
 
     function updateText() {

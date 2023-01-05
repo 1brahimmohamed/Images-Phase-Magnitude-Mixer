@@ -47,7 +47,6 @@ document.addEventListener('click', (evt) => {
         else if (evt.target.classList.contains('bx-minus-front'))
             mode = modes[2]
 
-        console.log(mode)
     }
 })
 
