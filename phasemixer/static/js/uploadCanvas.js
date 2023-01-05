@@ -1,38 +1,53 @@
+/******************************************************************************
+ *
+ * File Name  : uploadCanvas.js
+ * Description: This file handles:
+ *              1- the upload of photos from local computer to the frontend &
+ *              to server and preview them in the canvas.
+ *              2- toggling between the phase & magnitude images on the canvas
+ * Author     : Ibrahim Mohamed
+ *
+ *******************************************************************************/
+
+
+/**  ------------------------------------------ Variables Declarations ------------------------------------------ **/
+
+// Image Objects Variables
 let imageOriginalOne = new Image(),
     imageOriginalTwo = new Image(),
-    imageMagOne = new Image(),
-    imageMagTwo = new Image(),
+    imageOneMagPhase = new Image(),
+    imageTwoMagPhase = new Image(),
     imgMag1 = new Image(),
-    imgMag2 = new Image(),
-    canvasPreviewMode1 = true,
-    canvasPreviewMode2 = true;
+    imgMag2 = new Image();
 
+
+// DOM Elements Variables
 let check1 = document.getElementById('check1'),
     check2 = document.getElementById('check2');
 
-
+// Path Variables
 let image1Path = '../static/images/image1.jpg',
     image2Path = '../static/images/image2.jpg',
-    imageMag1Path = '../static/images/mag1.jpg',
-    imageMag2Path = '../static/images/mag2.jpg',
+    image1MagnitudePath = '../static/images/mag1.jpg',
+    image2MagnitudePath = '../static/images/mag2.jpg',
     image1PhasePath = '../static/images/phase1.jpg',
     image2PhasePath = '../static/images/phase2.jpg';
+
+
+/**  ---------------------------------------------- Event Listeners ---------------------------------------------- **/
 
 // upload handling
 document.addEventListener('input', (evt) => {
 
-    // if the target element is input element
     if (evt.target.matches('.upload-class')) {
         let file = evt.target.files[0],         // get the file from the element
-            formData = new FormData();          // create a new form data object
+            formData = new FormData();
 
-        // append the file to the form data object
         formData.append('file', file);
 
         // select when to save the file to the server
         formData.append('location', evt.target.id === 'selectedFile' ? 'image1' : 'image2');
 
-        // send the server request
         axios.post('http://127.0.0.1:7000/phasemixer/upload', formData)
             .then((response) => {
 
@@ -45,9 +60,9 @@ document.addEventListener('input', (evt) => {
                 // else toggle the second canvas
                 if (evt.target.id === 'selectedFile') {
                     imageOriginalOne.src = image1Path;
-                    imageMagOne.src = imageMag1Path;
+                    imageOneMagPhase.src = image1MagnitudePath;
                     selectedImage = imageOriginalOne;
-                    magImage = imageMagOne;
+                    magImage = imageOneMagPhase;
                     originalPos = 0;
                     magPos = 1;
 
@@ -61,9 +76,9 @@ document.addEventListener('input', (evt) => {
 
                 } else {
                     imageOriginalTwo.src = image2Path;
-                    imageMagTwo.src = image2PhasePath;
+                    imageTwoMagPhase.src = image2PhasePath;
                     selectedImage = imageOriginalTwo;
-                    magImage = imageMagTwo;
+                    magImage = imageTwoMagPhase;
                     originalPos = 2;
                     magPos = 3;
 
@@ -93,60 +108,34 @@ document.addEventListener("change", (evt)=>{
             let newImage1 = new Image(),
                 newImage2 = new Image();
 
+            newImage1.src = image1PhasePath                 // canvas 2 is viewing the phase image
+            newImage2.src = image2MagnitudePath             // canvas 4 is viewing the magnitude image
+            imgMag1.image(newImage1)
+            imgMag2.image(newImage2)
+            evt.target.id === 'check1' ? check2.checked = true : check1.checked = true
 
-            if (evt.target.id === 'check1'){
-                newImage1.src = image1PhasePath
-                newImage2.src = imageMag2Path
-                imgMag1.image(newImage1)
-                imgMag2.image(newImage2)
-                canvasPreviewMode1 = false
-                check2.checked = true
-
-            } else {
-                newImage1.src = image1PhasePath
-                newImage2.src = imageMag2Path
-                imgMag1.image(newImage1)
-                imgMag2.image(newImage2)
-                canvasPreviewMode2 = false
-                check1.checked = true
-
-            }
-
-            if (canvas1Status !== canvasStatus[2])
-                canvas1Status = canvasStatus[0];
-            if (canvas2Status !== canvasStatus[2])
-                canvas2Status = canvasStatus[1];
-
-
+            if (canvas1Status !== canvasStates[2])
+                canvas1Status = canvasStates[0];
+            if (canvas2Status !== canvasStates[2])
+                canvas2Status = canvasStates[1];
         }
         else if (!evt.target.checked) {
             let newImage1 = new Image(),
                 newImage2 = new Image();
 
-            if (evt.target.id === 'check1'){
-                newImage1.src = imageMag1Path
-                newImage2.src = image2PhasePath
-                imgMag1.image(newImage1)
-                imgMag2.image(newImage2)
-                canvasPreviewMode1 = true
-                check2.checked = false
-            } else {
-                newImage1.src = imageMag1Path
-                newImage2.src = image2PhasePath
-                imgMag1.image(newImage1)
-                imgMag2.image(newImage2)
-                canvasPreviewMode2 = true
-                check1.checked = false
-            }
+            newImage1.src = image1MagnitudePath
+            newImage2.src = image2PhasePath
+            imgMag1.image(newImage1)
+            imgMag2.image(newImage2)
 
-            if (canvas1Status !== canvasStatus[2])
-                canvas1Status = canvasStatus[1];
-            if (canvas2Status !== canvasStatus[2])
-                canvas2Status = canvasStatus[0];
+            evt.target.id === 'check1' ? check2.checked = false : check1.checked = false
 
-
+            if (canvas1Status !== canvasStates[2])
+                canvas1Status = canvasStates[1];
+            if (canvas2Status !== canvasStates[2])
+                canvas2Status = canvasStates[0];
         }
-        sendRequest(undefined, shapesCanvas2, mode)
+        sendRequest()
     }
 })
 
