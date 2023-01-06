@@ -12,7 +12,7 @@
 ### Introduction
 Phase and magnitude is the two basic components for any signal. One of these signals are images. In this project,
 we are going to mix two images with different phase and magnitude. The main idea is to mix the phase of one image with
-the magnitude of another image and vise versa to show that phase has the most details of the image and it;s more important
+the magnitude of another image and vise versa to show that phase has the most details of the image, and it's more important
 and magnitude has the intensity of the image, and it's less important. 
 The result of the mixing is a new image that has almost the details of the first image and the intensity of the second image.
 so it's a new image that is close to the first image.
@@ -69,17 +69,17 @@ master
 ### Quick Preview
 
 #### Upload Images & Toggle between their phases and magnitudes
-................................
+![Upload-Toggle](phasemixer/static/gifs/upload_toggle.gif)
 #### Drag Multiple Shapes to select multiple parts of the image
-................................
+![Drag-Select Shapes](phasemixer/static/gifs/drag_select_shapes.gif)
 #### Low Pass Filter
-................................
+![Low Pass Filter](phasemixer/static/gifs/low_pass_filter.gif)
 #### High Pass Filter
- ................................
+![High Pass Filter](phasemixer/static/gifs/high_pass_filter.gif)
 #### Selecting modes
-................................
+![Modes](phasemixer/static/gifs/modes.gif)
 #### Uniform Phase & Magnitude
-................................
+![Uniform Phase & Magnitude](phasemixer/static/gifs/disable.gif)
 
 ### Run the Project 
 1. Install Python3 in your computer

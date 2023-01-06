@@ -1,3 +1,11 @@
+/************************************************************************************
+ *
+ * File Name  : style.css
+ * Description: This file contains the layout styling of the whole program
+ * Authors     : Maye Khaled & Mariam Wael
+ *
+ ************************************************************************************/
+
 :root {
   --main-radius: 30px;
   --main-padding: 5px;
