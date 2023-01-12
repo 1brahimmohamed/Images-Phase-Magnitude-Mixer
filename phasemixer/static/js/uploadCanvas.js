@@ -60,7 +60,7 @@ document.addEventListener('input', (evt) => {
                 // else toggle the second canvas
                 if (evt.target.id === 'selectedFile') {
                     imageOriginalOne.src = image1Path;
-                    imageOneMagPhase.src = image1MagnitudePath;
+                    check1.checked ? imageOneMagPhase.src = image1PhasePath:imageOneMagPhase.src = image1MagnitudePath;
                     selectedImage = imageOriginalOne;
                     magImage = imageOneMagPhase;
                     originalPos = 0;
@@ -76,7 +76,7 @@ document.addEventListener('input', (evt) => {
 
                 } else {
                     imageOriginalTwo.src = image2Path;
-                    imageTwoMagPhase.src = image2PhasePath;
+                    check1.checked ? imageTwoMagPhase.src = image2MagnitudePath: imageTwoMagPhase.src = image2PhasePath;;
                     selectedImage = imageOriginalTwo;
                     magImage = imageTwoMagPhase;
                     originalPos = 2;
