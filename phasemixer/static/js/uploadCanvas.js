@@ -13,12 +13,14 @@
 /**  ------------------------------------------ Variables Declarations ------------------------------------------ **/
 
 // Image Objects Variables
-let imageOriginalOne = new Image(),
-    imageOriginalTwo = new Image(),
-    imageOneMagPhase = new Image(),
-    imageTwoMagPhase = new Image(),
-    imgMag1 = new Image(),
-    imgMag2 = new Image();
+// let imageOriginalOne = new Image(),
+//     imageOriginalTwo = new Image(),
+//     imageOneMagPhase = new Image(),
+//     imageTwoMagPhase = new Image(),
+   let selectionCanvas1Image = new Image(),
+    selectionCanvas2Image = new Image(),
+    previewCanvas1Image  = new Image(),
+    previewCanvas2Image = new Image();
 
 
 // DOM Elements Variables
@@ -31,10 +33,31 @@ let image1Path = '../static/images/image1.jpg',
     image1MagnitudePath = '../static/images/mag1.jpg',
     image2MagnitudePath = '../static/images/mag2.jpg',
     image1PhasePath = '../static/images/phase1.jpg',
-    image2PhasePath = '../static/images/phase2.jpg';
+    image2PhasePath = '../static/images/phase2.jpg',
+    image1PreviewPath = '../static/images/preview1.jpg';
 
 
 /**  ---------------------------------------------- Event Listeners ---------------------------------------------- **/
+
+
+// startup function
+const startUp = () => {
+    let canvasStartUpImage = new Image();
+
+    canvasStartUpImage.src = image1PreviewPath;
+
+    selectionCanvas1Image = drawImage(canvasStartUpImage)
+    selectionCanvas2Image = drawImage(canvasStartUpImage)
+    previewCanvas1Image   = drawImage(canvasStartUpImage)
+    previewCanvas2Image   = drawImage(canvasStartUpImage)
+
+    layers[0].add(previewCanvas1Image);
+    layers[1].add(selectionCanvas1Image);
+    layers[2].add(previewCanvas2Image);
+    layers[3].add(selectionCanvas2Image);
+};
+
+startUp();
 
 // upload handling
 document.addEventListener('input', (evt) => {
@@ -51,49 +74,38 @@ document.addEventListener('input', (evt) => {
         axios.post('http://127.0.0.1:7000/phasemixer/upload', formData)
             .then((response) => {
 
-                let selectedImage,
-                    magImage,
-                    originalPos,
-                    magPos;
 
                 // if the image is the first image toggle the first canvas
                 // else toggle the second canvas
                 if (evt.target.id === 'selectedFile') {
-                    imageOriginalOne.src = image1Path;
-                    check1.checked ? imageOneMagPhase.src = image1PhasePath:imageOneMagPhase.src = image1MagnitudePath;
-                    selectedImage = imageOriginalOne;
-                    magImage = imageOneMagPhase;
-                    originalPos = 0;
-                    magPos = 1;
 
-                    // add image to canvas 1 (original image 1)
-                    let img = drawImage(selectedImage);
-                    layers[originalPos].add(img);
+                    let image = new Image();
+                    image.src = image1Path
+                    let imageMagPhase = new Image()
+                    check1.checked ? imageMagPhase.src = image1PhasePath : imageMagPhase.src = image1MagnitudePath;
 
+                    previewCanvas1Image.image(image);
                     // add image to canvas 2 (phase/magnitude image 1)
-                    imgMag1 = drawImage(magImage);
-                    layers[magPos].add(imgMag1);
+                    selectionCanvas1Image.image(imageMagPhase);
 
                 } else {
-                    imageOriginalTwo.src = image2Path;
-                    check1.checked ? imageTwoMagPhase.src = image2MagnitudePath: imageTwoMagPhase.src = image2PhasePath;;
-                    selectedImage = imageOriginalTwo;
-                    magImage = imageTwoMagPhase;
-                    originalPos = 2;
-                    magPos = 3;
+                    let image = new Image();
+                    image.src = image2Path;
+                    let imageMagPhase = new Image()
+                    check1.checked ? imageMagPhase.src = image2MagnitudePath: imageMagPhase.src = image2PhasePath;
 
-                    // add image to canvas 3 (original image 2)
-                    let img = drawImage(selectedImage);
-                    layers[originalPos].add(img);
+                    // update image to canvas 3 (original image 2)
+                    previewCanvas2Image.image(image);
 
-                    // add image to canvas 4 (phase/magnitude image 2)
-                    imgMag2 = drawImage(magImage);
-                    layers[magPos].add(imgMag2);
+                    // update image to canvas 4 (phase/magnitude image 2)
+                    selectionCanvas2Image.image(imageMagPhase);
                 }
             })
             .catch((err) => {
                 console.log(err);
             })
+
+        sendRequest()
     }
 })
 
@@ -110,8 +122,8 @@ document.addEventListener("change", (evt)=>{
 
             newImage1.src = image1PhasePath                 // canvas 2 is viewing the phase image
             newImage2.src = image2MagnitudePath             // canvas 4 is viewing the magnitude image
-            imgMag1.image(newImage1)
-            imgMag2.image(newImage2)
+            selectionCanvas1Image.image(newImage1)
+            selectionCanvas2Image.image(newImage2)
             evt.target.id === 'check1' ? check2.checked = true : check1.checked = true
 
             if (canvas1Status !== canvasStates[2])
@@ -125,8 +137,8 @@ document.addEventListener("change", (evt)=>{
 
             newImage1.src = image1MagnitudePath
             newImage2.src = image2PhasePath
-            imgMag1.image(newImage1)
-            imgMag2.image(newImage2)
+            selectionCanvas1Image.image(newImage1)
+            selectionCanvas2Image.image(newImage2)
 
             evt.target.id === 'check1' ? check2.checked = false : check1.checked = false
 

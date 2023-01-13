@@ -39,11 +39,11 @@ def extract_magnitude_phase(picture_1, picture_2, c1_state: str, c2_state: str, 
             phase = np.ones(magnitude.shape)
         else:
             phase = picture_1.crop_img('phase', c1_shapes, mode)
-            magnitude = np.ones(phase.shape)
+            magnitude = np.ones(phase.shape)*200
 
     if c1_state == 'disable' and c2_state == 'disable':
 
-        magnitude = np.ones((314, 314))  # uniform magnitude
+        magnitude = np.ones((314, 314))*200  # uniform magnitude
         phase = np.ones((314, 314))      # uniform phase
 
     return magnitude, phase

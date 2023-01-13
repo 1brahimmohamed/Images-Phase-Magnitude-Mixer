@@ -65,11 +65,17 @@ function main() {
     stages[1].on('mousedown', mouseDownHandler)
     stages[1].on('mousemove', mouseMoveHandler)
     stages[1].on('mouseup', mouseUpHandler)
-
+    stages[1].on('mouseover', function () {
+        currentStage = 1;
+    })
     // stage 3
     stages[3].on('mousedown', mouseDownHandler)
     stages[3].on('mousemove', mouseMoveHandler)
     stages[3].on('mouseup', mouseUpHandler)
+    stages[3].on('mouseover', function () {
+        currentStage = 3;
+    })
+
 }
 
 main();

@@ -21,7 +21,7 @@
 const checkDraw = (x_current, y_current) => {
     // check if the mouse position is on one of our drawn shapes
     for (let i = 0; i < operatingShapes.length; i++) {
-        let offset = 5
+        let offset = 10
 
         if (operatingShapes[i].className === 'Rect') {
             if (operatingShapes[i].x() - offset <= x_current &&
@@ -52,34 +52,6 @@ const checkDraw = (x_current, y_current) => {
 }
 
 
-/**
- * Function to detect which canvas the user is drawing on
- * @param event
- * @returns {number} -> index of the stage
- * Description: the function checks the event object where it handles drawing on empty canvas and on image
- * first, try if there is a parent to the event (parent to image is our canvas)
- * if no errors then a picture exists then select by parent id
- * if there's error and there is no parent (null) the catch will operate, and then we will use the canvas id itself
- **/
-const detectCanvas = (event) => {
-    try {
-        let id = event.target.parent._id;
-        if (id === 7)
-            return 1;
-        else if (id === 9)
-            return 3;
-        else
-            return 1;
-    } catch (e) {
-        if (event.target._id === 2)
-            return 1;
-        else
-            return 3;
-    }
-}
-
-
-
 /**  ---------------------------------------------- Event Listeners ---------------------------------------------- **/
 
 
@@ -90,14 +62,18 @@ const detectCanvas = (event) => {
  **/
 const mouseDownHandler = (event) => {
 
-    currentStage = detectCanvas(event);
 
     // get the position of the mouse on click down
     let x_current = stages[currentStage].getPointerPosition().x,
         y_current = stages[currentStage].getPointerPosition().y;
 
     // choose which shapes array to store to
-    currentStage === 1 ? operatingShapes = shapesCanvas1 : operatingShapes = shapesCanvas2
+    if (currentStage === 1) {
+        operatingShapes = shapesCanvas1;
+    }
+    else {
+        operatingShapes = shapesCanvas2;
+    }
 
     wantToDraw = checkDraw(x_current, y_current);
 
@@ -123,10 +99,10 @@ const mouseDownHandler = (event) => {
 const mouseMoveHandler = (event) => {
 
     if (!wantToDraw)
-        return
+        return;
 
     if (!isDrawing) {
-        return
+        return;
     }
 
     if (circleDraw === false) {
@@ -152,8 +128,9 @@ const mouseUpHandler = (event) => {
     if (!wantToDraw) {
         sendRequest();
         wantToDraw = true;
-        return
+        return;
     }
+
 
     // to normalize the inputs if the user draw it backward
     if (objDraw.width() < 0 && objDraw.height() < 0) {
@@ -174,20 +151,20 @@ const mouseUpHandler = (event) => {
 
     const tr = new Konva.Transformer({
         nodes: [objDraw],
-        anchorDragBoundFunc: function (oldPos, newPos, event) {
-
-            // oldPos - is old absolute position of the anchor
-            // newPos - is a new (possible) absolute position of the anchor based on pointer position
-            // it is possible that anchor will have a different absolute position after this function
-            // because every anchor has its own limits on position, based on resizing logic
-
-            // do not snap rotating point
-            if (tr.getActiveAnchor() === 'rotater') {
-                return newPos;
-
-            }
-            return newPos;
-        },
+        // anchorDragBoundFunc: function (oldPos, newPos, event) {
+        //
+        //     // oldPos - is old absolute position of the anchor
+        //     // newPos - is a new (possible) absolute position of the anchor based on pointer position
+        //     // it is possible that anchor will have a different absolute position after this function
+        //     // because every anchor has its own limits on position, based on resizing logic
+        //
+        //     // do not snap rotating point
+        //     if (tr.getActiveAnchor() === 'rotater') {
+        //         return newPos;
+        //
+        //     }
+        //     return newPos;
+        // },
     });
     layers[currentStage].add(tr);
 
