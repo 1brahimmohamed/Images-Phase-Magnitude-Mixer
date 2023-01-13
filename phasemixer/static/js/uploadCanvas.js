@@ -100,12 +100,11 @@ document.addEventListener('input', (evt) => {
                     // update image to canvas 4 (phase/magnitude image 2)
                     selectionCanvas2Image.image(imageMagPhase);
                 }
+                sendRequest()
             })
             .catch((err) => {
                 console.log(err);
             })
-
-        sendRequest()
     }
 })
 

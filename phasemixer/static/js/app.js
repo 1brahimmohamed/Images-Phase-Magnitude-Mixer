@@ -75,7 +75,6 @@ function main() {
     stages[3].on('mouseover', function () {
         currentStage = 3;
     })
-
 }
 
 main();

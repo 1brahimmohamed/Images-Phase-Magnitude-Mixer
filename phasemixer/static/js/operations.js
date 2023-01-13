@@ -131,6 +131,9 @@ const mouseUpHandler = (event) => {
         return;
     }
 
+    if (!isDrawing) {
+        return;
+    }
 
     // to normalize the inputs if the user draw it backward
     if (objDraw.width() < 0 && objDraw.height() < 0) {
@@ -146,6 +149,8 @@ const mouseUpHandler = (event) => {
 
     isDrawing = false;        // disable drawing
 
+
+    console.log('7atet shape')
     // push the shape to the array of shape of its canvas
     currentStage === 1 ? operatingShapes = shapesCanvas1.push(objDraw) : shapesCanvas2.push(objDraw);
 

@@ -1,7 +1,7 @@
 """
  *
- * File Name  : views.py
- * Description: Implementation of project endpoints
+ * File Name   : views.py
+ * Description : Implementation of project endpoints
  * Authors     : Ibrahim Mohamed & Mahmoud Salman
  *
  """

@@ -2,7 +2,7 @@
  *
  * File Name  : urls.py
  * Description: Declaration of project endpoints
- * Author    : Ibrahim Mohamed
+ * Author    :  Ibrahim Mohamed
  *
  """
 from django.urls import path
