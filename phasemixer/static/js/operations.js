@@ -21,7 +21,7 @@
 const checkDraw = (x_current, y_current) => {
     // check if the mouse position is on one of our drawn shapes
     for (let i = 0; i < operatingShapes.length; i++) {
-        let offset = 10
+        let offset = 5
 
         if (operatingShapes[i].className === 'Rect') {
             if (operatingShapes[i].x() - offset <= x_current &&

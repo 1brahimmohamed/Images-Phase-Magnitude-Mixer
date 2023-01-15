@@ -33,6 +33,34 @@ def home(request):
 
 @csrf_protect
 @csrf_exempt
+def upload(request):
+    if request.method == 'POST':
+
+        file = request.FILES['file']
+        location = request.POST['location']
+
+        # Create 2 objects from class using ternary operator
+        img = ImageMain(
+            file,
+            f'{location}.jpg',
+            ('mag1.jpg' if location == 'image1' else 'mag2.jpg'),
+            ('phase1.jpg' if location == 'image2' else 'phase2.jpg'))
+
+        # storing objects in list
+        if location == 'image1':
+            pictures[0] = img
+        else:
+            pictures[1] = img
+
+        return JsonResponse(
+            {
+                'Status': "Saved Successfully",
+            }
+        )
+
+
+@csrf_protect
+@csrf_exempt
 def generate_result(request):
     if request.method == 'POST':
         req = json.loads(request.body)
@@ -56,36 +84,8 @@ def generate_result(request):
         # Generate mixed array
         result_arr = np.real(np.fft.ifft2(np.multiply(magnitude, np.exp(1j * phase))))
 
-        # Save result image
+        # Save result image.
         plt.imsave('phasemixer/static/images/result.jpg', np.abs(result_arr), cmap='gray')
-
-        return JsonResponse(
-            {
-                'Status': "Saved Successfully",
-            }
-        )
-
-
-@csrf_protect
-@csrf_exempt
-def upload(request):
-    if request.method == 'POST':
-
-        file = request.FILES['file']
-        location = request.POST['location']
-
-        # Create 2 objects from class using ternary operator
-        img = ImageMain(
-            file,
-            f'{location}.jpg',
-            ('mag1.jpg' if location == 'image1' else 'mag2.jpg'),
-            ('phase1.jpg' if location == 'image2' else 'phase2.jpg'))
-
-        # storing objects in list
-        if location == 'image1':
-            pictures[0] = img
-        else:
-            pictures[1] = img
 
         return JsonResponse(
             {
