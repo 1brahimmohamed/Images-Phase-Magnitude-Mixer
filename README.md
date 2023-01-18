@@ -95,6 +95,7 @@ pip install -r requirments.txt
 python manage.py runserver 7000
 ```
 visit http://localhost/phasemixer/home
+
 4. Do not forget to disable your browser cache for the output to be loaded
 ```
 - Right click
