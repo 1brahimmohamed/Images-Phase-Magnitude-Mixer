@@ -93,7 +93,7 @@ class ImageMain:
             arr = self.__arr_phase
             img = self.__img_phase
         else:   # uniform phase or magnitude
-            return np.ones(self.Image_Size)
+            return np.ones((314, 314))
 
         img_copy = img.copy()
         arr = arr.copy()
