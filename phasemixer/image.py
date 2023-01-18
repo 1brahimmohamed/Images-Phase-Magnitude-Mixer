@@ -84,7 +84,7 @@ class ImageMain:
     def img_phase(self):
         return self.__img_phase
 
-    def crop_img(self, cropped_type: str, shapes, mode='or'):
+    def crop_img(self, cropped_type: str, shapes: list, mode='or'):
 
         if cropped_type == 'magnitude':
             arr = self.__arr_mag
@@ -92,7 +92,7 @@ class ImageMain:
         elif cropped_type == 'phase':
             arr = self.__arr_phase
             img = self.__img_phase
-        else:
+        else:   # uniform phase or magnitude
             return np.ones((314, 314))
 
         img_copy = img.copy()
