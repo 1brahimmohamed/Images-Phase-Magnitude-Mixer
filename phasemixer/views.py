@@ -25,9 +25,9 @@ pictures = [ImageMain, ImageMain]
 @csrf_exempt
 def home(request):
     preview_image_arr = np.ones((314, 314))
-    img = preview_image_arr*100
-    plt.imsave('phasemixer/static/images/preview1.jpg', np.abs(img), cmap= 'binary')
-    plt.imsave('phasemixer/static/images/preview2.jpg', np.abs(img), cmap= 'binary')
+    img = preview_image_arr * 100
+    plt.imsave('phasemixer/static/images/preview1.jpg', np.abs(img), cmap='binary')
+    plt.imsave('phasemixer/static/images/preview2.jpg', np.abs(img), cmap='binary')
     return render(request, 'home.html')
 
 
